@@ -121,19 +121,56 @@ async function ready() {
     await context.close();
   }
   for (const width of [390, 1440]) {
-    const context = await browser.newContext({ viewport: { width, height: 800 }, reducedMotion: 'no-preference' });
+    const context = await browser.newContext({ viewport: { width, height: 800 }, reducedMotion: 'no-preference', hasTouch: width === 390, isMobile: width === 390 });
     const page = await context.newPage();
     page.on('pageerror', error => errors.push(error.message));
     await page.goto(origin);
     await page.waitForFunction(() => document.documentElement.classList.contains('motion-ready'));
-    assert.match(await page.locator('html').evaluate(element => getComputedStyle(element).scrollSnapType), /^y(?: proximity)?$/);
+    assert.match(await page.locator('html').evaluate(element => getComputedStyle(element).scrollSnapType), /^y mandatory$/);
     const chapter = page.locator('#services');
     await chapter.evaluate(element => element.scrollIntoView({ behavior: 'instant', block: 'start' }));
     await page.waitForFunction(() => document.querySelector('#services').classList.contains('is-visible'));
     await page.waitForFunction(() => Number(getComputedStyle(document.querySelector('#services')).opacity) > .99);
     assert.ok(await chapter.evaluate(element => Math.abs(element.getBoundingClientRect().top) < 160), 'Magnetic scrolling aligns a chapter in the viewport');
-    assert.ok(await page.locator('.service').first().evaluate(element => getComputedStyle(element).backdropFilter.includes('blur')), 'Glass panels use backdrop blur');
+    assert.equal(await page.locator('.service').first().evaluate(element => getComputedStyle(element).backdropFilter), 'none', 'Cards avoid expensive backdrop filters');
+    assert.equal(await chapter.evaluate(element => getComputedStyle(element).filter), 'none', 'Reading area is never blurred');
+    assert.equal(await chapter.evaluate(element => getComputedStyle(element).scrollSnapStop), 'always');
+    assert.equal(await page.locator('.edge-lens').count(), 2);
+    assert.ok(await page.locator('.edge-lens').first().evaluate(element => getComputedStyle(element).backdropFilter.includes('blur')), 'Glass lens is restricted to the screen edges');
     assert.ok(await page.locator('.scroll-progress').evaluate(element => Number(element.style.getPropertyValue('--scroll-progress')) > 0), 'Progress tracks the scroll position');
+    if (width === 390) {
+      await page.locator('#about').evaluate(element => element.scrollIntoView({ behavior: 'instant', block: 'start' }));
+      const session = await context.newCDPSession(page);
+      await session.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: 195, y: 650 }] });
+      for (let step = 1; step <= 12; step++) {
+        await session.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: 195, y: 650 - step * 40 }] });
+        await page.waitForTimeout(20);
+      }
+      await session.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+      await page.waitForTimeout(900);
+      await page.waitForFunction(() => {
+        const section = document.querySelector('#services');
+        const inset = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) + parseFloat(getComputedStyle(section).scrollMarginTop);
+        return Math.abs(section.getBoundingClientRect().top - inset) < 6;
+      }, null, { timeout: 5000 });
+      await page.waitForTimeout(550);
+      const stoppedAt = await page.evaluate(() => scrollY);
+      await page.waitForTimeout(200);
+      assert.ok(Math.abs(await page.evaluate(() => scrollY) - stoppedAt) < 2, 'Mobile scroll stops on a chapter after the animation');
+    }
+    if (width === 1440) {
+      await page.locator('#about').evaluate(element => element.scrollIntoView({ behavior: 'instant', block: 'start' }));
+      await page.mouse.move(500, 200);
+      await page.mouse.wheel(0, 900);
+      await page.mouse.wheel(0, 500);
+      await page.waitForFunction(() => {
+        const section = document.querySelector('#services');
+        const inset = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) + parseFloat(getComputedStyle(section).scrollMarginTop);
+        return Math.abs(section.getBoundingClientRect().top - inset) < 6;
+      }, null, { timeout: 5000 });
+      await page.waitForTimeout(800);
+      assert.ok(await chapter.evaluate(element => Math.abs(element.getBoundingClientRect().top) < 160), 'Wheel momentum cannot skip the next chapter');
+    }
     await page.screenshot({ path: `test-results/glass-${width}.png` });
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.waitForFunction(() => !document.documentElement.classList.contains('motion-ready'));

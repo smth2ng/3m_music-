@@ -881,8 +881,8 @@ body::before {
   background: linear-gradient(130deg, rgba(255, 255, 255, .065), rgba(255, 255, 255, .018)), rgba(16, 16, 16, .66);
   border-color: var(--glass-edge);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, .055), 0 24px 70px rgba(0, 0, 0, .2);
-  -webkit-backdrop-filter: blur(18px) saturate(125%);
-  backdrop-filter: blur(18px) saturate(125%);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
 }
 .navigation,
 .contact-dialog {
@@ -902,37 +902,77 @@ body::before {
   background: linear-gradient(90deg, #c84d00, #ff7a00, #ffd0a3);
   box-shadow: 0 0 16px rgba(255, 122, 0, .35);
 }
+/* Comic movement stays at the edges; readable content never gets blurred. */
+.edge-lens {
+  position: fixed;
+  top: 10vh;
+  width: clamp(16px, 3.2vw, 52px);
+  height: 80vh;
+  z-index: 8;
+  pointer-events: none;
+  opacity: 0;
+  contain: layout paint;
+  transition: opacity .22s ease;
+  background: linear-gradient(90deg, rgba(255, 122, 0, .2), rgba(255, 255, 255, .07) 38%, transparent);
+  -webkit-backdrop-filter: blur(2px) saturate(150%);
+  backdrop-filter: blur(2px) saturate(150%);
+  will-change: transform;
+}
+.edge-lens--left {
+  left: 0;
+  border-right: 1px solid rgba(255, 185, 112, .48);
+  border-radius: 0 100% 100% 0 / 0 50% 50% 0;
+}
+.edge-lens--right {
+  right: 0;
+  border-left: 1px solid rgba(255, 185, 112, .48);
+  border-radius: 100% 0 0 100% / 50% 0 0 50%;
+  background: linear-gradient(-90deg, rgba(255, 122, 0, .2), rgba(255, 255, 255, .07) 38%, transparent);
+}
+.edge-lens::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(110deg, transparent 0 30px, rgba(255, 199, 139, .3) 31px 32px, transparent 33px 65px);
+  transform: skewY(-12deg);
+}
+.motion-ready.is-scrolling .edge-lens {
+  opacity: 1;
+}
 @media (prefers-reduced-motion: no-preference) {
   html {
-    scroll-snap-type: y proximity;
+    scroll-snap-type: y mandatory;
   }
-  .page > section {
+  .page > section,
+  .page > footer {
     scroll-snap-align: start;
-    scroll-margin-top: clamp(36px, 8vh, 80px);
+    scroll-snap-stop: always;
+    scroll-margin-top: clamp(24px, 6vh, 56px);
   }
   .page > .hero {
     scroll-margin-top: 0;
   }
   .motion-ready .motion-section {
-    opacity: .12;
-    transform: translate3d(0, 60px, 0) scale(.975);
-    filter: blur(5px);
-    transition: opacity .85s ease, transform 1.1s cubic-bezier(.16, 1, .3, 1), filter .85s ease;
+    opacity: .7;
+    transform: none;
+    transition: opacity .3s ease-out;
   }
   .motion-ready .motion-section.is-visible,
   .motion-ready .motion-section:focus-within,
   .motion-ready .motion-section:target {
     opacity: 1;
     transform: none;
-    filter: none;
+  }
+  .motion-ready .motion-section.is-visible h2 {
+    animation: comic-arrival .48s cubic-bezier(.2, .8, .2, 1) both;
   }
   .motion-ready .motion-section .service,
   .motion-ready .motion-section .steps li,
   .motion-ready .motion-section .teacher {
-    opacity: .15;
-    transform: translateY(28px);
-    transition: opacity .7s ease, transform .9s cubic-bezier(.16, 1, .3, 1);
-    transition-delay: calc(var(--reveal-order, 0) * 90ms);
+    opacity: .4;
+    transform: translate3d(0, 12px, 0);
+    transition: opacity .25s ease-out, transform .4s cubic-bezier(.2, 1.3, .4, 1);
+    transition-delay: calc(var(--reveal-order, 0) * 45ms);
   }
   .motion-ready .motion-section.is-visible .service,
   .motion-ready .motion-section.is-visible .steps li,
@@ -943,6 +983,11 @@ body::before {
     opacity: 1;
     transform: none;
   }
+  @keyframes comic-arrival {
+    0% { transform: translate3d(-8px, 6px, 0) skewX(-3deg); }
+    65% { transform: translate3d(2px, -1px, 0) skewX(1deg); }
+    100% { transform: none; }
+  }
 }
 @media (max-width: 767px) {
   :root {
@@ -952,7 +997,11 @@ body::before {
     margin-top: 110px;
   }
   .panel {
-    -webkit-backdrop-filter: blur(10px) saturate(115%);
-    backdrop-filter: blur(10px) saturate(115%);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
   }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .edge-lens { display: none; }
 }
