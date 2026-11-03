@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#050505">
+  <meta name="description" content="3М music — продюсерский центр в Туле. Вокал, студия, создание треков, клипов и продвижение музыкальных проектов.">
+  <title>3М music — продюсерский центр</title>
+  <link rel="icon" href="/assets/logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#about">Перейти к содержимому</a>
+<main class="page">
+  <section class="hero" aria-labelledby="hero-title">
+    <header class="header">
+      <a href="#" class="brand" aria-label="3М music — на главную"><img src="/assets/logo.svg" alt="3М music" width="183" height="155"></a>
+      <h1 id="hero-title">От идеи до трека, клипа<br>и продвижения</h1>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="navigation" aria-label="Открыть меню"><span></span><span></span><span></span></button>
+      <nav id="navigation" class="navigation" aria-label="Основная навигация" hidden>
+        <a href="#about">О центре</a><a href="#services">Услуги</a><a href="#journey">Путь артиста</a><a href="#teachers">Преподаватели</a><a href="#contacts">Контакты</a>
+      </nav>
+    </header>
+    <div class="artists" role="region" aria-roledescription="карусель" aria-label="Артисты" tabindex="0">
+      <p class="sr-only" id="carousel-help">Нажмите на карточку или используйте стрелки влево и вправо, чтобы сменить артиста. На телефоне можно листать свайпом.</p>
+      <button type="button" class="artist artist--active" data-artist="0" aria-pressed="true" aria-label="Артисты на переднем плане. Переключить карточку" aria-describedby="carousel-help"><img src="/assets/artists-front.webp" alt="Музыкальная группа: четыре участника в прыжке" width="1462" height="1076" fetchpriority="high" draggable="false"><span class="artist-overlay"></span></button>
+      <button type="button" class="artist artist--back" data-artist="1" aria-pressed="false" aria-label="Артисты на заднем плане. Показать впереди" aria-describedby="carousel-help"><img src="/assets/artists-back.webp" alt="Музыкальная группа: четыре участника" width="1075" height="1463" draggable="false"><span class="artist-overlay"></span></button>
+      <span class="sr-only" id="carousel-status" aria-live="polite">Карточка 1 из 2</span>
+    </div>
+    <button class="cta" type="button" data-contact>Оставить заявку</button>
+  </section>
+  <section class="about panel" id="about" aria-labelledby="about-title">
+    <h2 id="about-title">КРАТКО О НАС</h2>
+    <p>«3М» - продюсерский центр, где помогают артистам создавать музыку,<br class="desktop-break"> записывать вокал, выпускать треки, снимать клипы и продвигать проекты.</p>
+  </section>
+  <section class="services" id="services" aria-labelledby="services-title">
+    <p class="eyebrow">ЧЕМ МЫ ЗАНИМАЕМСЯ</p>
+    <h2 id="services-title">Создаем музыкальные<br class="desktop-break"> проекты под ключ</h2>
+    <div class="services-grid">
+      <article class="service panel"><h3>Вокал</h3><p>Постановка голоса,<br class="desktop-break"> <span class="mobile-only">дыхание, </span>интонация, песни, сцена.</p></article>
+      <article class="service panel"><h3>Студия</h3><p>Запись вокала, дублей, демо, каверов и готовых треков.</p></article>
+      <article class="service panel"><h3>Продюсирование</h3><p>Концепция, звучание, релиз, визуал, клип и продвижение.</p></article>
+    </div>
+  </section>
+  <section class="journey" id="journey" aria-labelledby="journey-title">
+    <p class="eyebrow">ПУТЬ АРТИСТА</p>
+    <h2 id="journey-title">Как идея становится релизом</h2>
+    <ol class="steps">
+      <li><h3>Вы приходите с идеей</h3><p>Текст, напетая мелодия, черновик песни или просто желание попробовать.</p></li>
+      <li><h3>Собираем песню</h3><p>Подбираем стиль, структуру, настроение, темп и звучание.</p></li>
+      <li><h3>Записываем вокал</h3><p>Работаем с подачей, уверенностью, интонацией и эмоцией.</p></li>
+      <li><h3>Доводим до результата</h3><p>Аранжировка, сведение, мастеринг, релиз, визуал и продвижение.</p></li>
+    </ol>
+  </section>
+  <section class="teachers panel" id="teachers" aria-labelledby="teachers-title">
+    <h2 id="teachers-title">Преподаватели</h2>
+    <div class="teacher-list">
+      <article class="teacher panel"><h3>Михаил Гришин</h3><img src="/assets/mikhail-grishin.webp" alt="Михаил Гришин" width="640" height="640" loading="lazy"></article>
+      <article class="teacher panel"><h3>Полина Гевель</h3></article>
+    </div>
+  </section>
+  <section class="contacts" id="contacts" aria-labelledby="contacts-title">
+    <h2 id="contacts-title">Контакты</h2>
+    <div class="contact-details"><p class="muted">Адрес</p><address>Тула, Городской переулок, 9</address><a class="phone" href="tel:+79109407608">8-910-940-76-08</a><p class="muted">Михаил</p></div>
+    <a class="map panel" href="https://yandex.ru/maps/?text=Тула%2C%20Городской%20переулок%2C%209" target="_blank" rel="noopener noreferrer" aria-label="Открыть карту: Тула, Городской переулок, 9"><h3>Карта</h3><p>Тула, Городской переулок, 9</p><span class="map-placeholder" aria-hidden="true"></span></a>
+  </section>
+  <footer class="footer"><a href="#" aria-label="3М music — наверх"><img src="/assets/footer-logo.svg" alt="3М music" width="398" height="324" loading="lazy"></a><small>© 3М, 2026</small></footer>
+</main>
+<dialog class="contact-dialog" aria-labelledby="dialog-title"><button class="dialog-close" type="button" aria-label="Закрыть">×</button><p class="eyebrow">3М MUSIC</p><h2 id="dialog-title">Обсудим ваш проект</h2><p>Позвоните Михаилу, чтобы оставить заявку и рассказать о своей идее.</p><a class="cta" href="tel:+79109407608">8-910-940-76-08</a></dialog>
+</body>
+</html>
