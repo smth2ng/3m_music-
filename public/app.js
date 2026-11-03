@@ -71,3 +71,46 @@ dialog.addEventListener('click', event => { if (event.target === dialog) {
   const rect = dialog.getBoundingClientRect();
   if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) dialog.close();
 } });
+
+// Progressive enhancement: content remains visible without JS or with reduced motion.
+const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
+const chapters = [...document.querySelectorAll('.page > section:not(.hero), .page > footer')];
+let chapterObserver;
+function configureMotion() {
+  chapterObserver?.disconnect();
+  document.documentElement.classList.remove('motion-ready');
+  if (motionPreference.matches || !('IntersectionObserver' in window)) return;
+  chapters.forEach(chapter => {
+    chapter.classList.add('motion-section');
+    chapter.querySelectorAll('.service, .steps li, .teacher').forEach((item, index) => {
+      item.style.setProperty('--reveal-order', index);
+    });
+    const bounds = chapter.getBoundingClientRect();
+    chapter.classList.toggle('is-visible', bounds.top < innerHeight * .92 && bounds.bottom > 0);
+  });
+  chapterObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => entry.target.classList.toggle('is-visible', entry.isIntersecting));
+  }, { rootMargin: '0px 0px -8% 0px', threshold: 0 });
+  chapters.forEach(chapter => chapterObserver.observe(chapter));
+  document.documentElement.classList.add('motion-ready');
+}
+configureMotion();
+motionPreference.addEventListener('change', configureMotion);
+const scrollProgress = document.createElement('div');
+scrollProgress.className = 'scroll-progress';
+scrollProgress.setAttribute('aria-hidden', 'true');
+document.body.append(scrollProgress);
+let progressFrame = 0;
+function updateScrollProgress() {
+  progressFrame = 0;
+  const maxScroll = document.documentElement.scrollHeight - innerHeight;
+  const progress = maxScroll > 0 ? Math.max(0, Math.min(1, scrollY / maxScroll)) : 0;
+  scrollProgress.style.setProperty('--scroll-progress', progress);
+}
+function scheduleScrollProgress() {
+  if (!progressFrame) progressFrame = requestAnimationFrame(updateScrollProgress);
+}
+window.addEventListener('scroll', scheduleScrollProgress, { passive: true });
+window.addEventListener('resize', scheduleScrollProgress, { passive: true });
+window.addEventListener('load', scheduleScrollProgress, { once: true });
+updateScrollProgress();

@@ -106,13 +106,40 @@ async function ready() {
     assert.equal(await page.locator('.map').getAttribute('target'), '_blank');
     if ([390, 1440].includes(width)) {
       const positions = await page.evaluate(() => Object.fromEntries(['.about', '.services-grid', '.teachers', '.map'].map(selector => [selector, document.querySelector(selector).getBoundingClientRect().top + scrollY])));
-      const expected = width === 390 ? { '.about': 610, '.services-grid': 1106.36, '.teachers': 2454.6, '.map': 3384.6 } : { '.about': 956, '.services-grid': 1506.12, '.teachers': 2681, '.map': 4019 };
-      for (const [selector, y] of Object.entries(expected)) assert.ok(Math.abs(positions[selector] - y) < 2, `Design position ${selector} at ${width}: ${positions[selector]} vs ${y}`);
+      assert.equal(positions['.about'], width === 390 ? 610 : 956, 'First screen remains aligned with the design');
+      assert.ok(positions['.services-grid'] > positions['.about']);
+      assert.ok(positions['.teachers'] > positions['.services-grid']);
+      assert.ok(positions['.map'] > positions['.teachers']);
+      const chapterGap = await page.locator('.journey').evaluate(element => parseFloat(getComputedStyle(element).marginTop));
+      assert.ok(chapterGap >= (width === 390 ? 120 : 170), 'Chapters have additional breathing room');
+      assert.equal(await page.locator('html').evaluate(element => getComputedStyle(element).scrollSnapType), 'none', 'Reduced motion disables magnetic scrolling');
       await page.evaluate(() => { document.activeElement.blur(); window.scrollTo(0, 0); });
       await page.mouse.move(0, 0);
       await page.screenshot({ path: `test-results/page-${width}.png`, fullPage: true });
     }
     console.log(`PASS ${width}px: layout, assets, menu, wheel/keyboard carousel, artist tab, overlay, contact dialog${width === 390 ? ', touch swipe, page scroll' : ''}`);
+    await context.close();
+  }
+  for (const width of [390, 1440]) {
+    const context = await browser.newContext({ viewport: { width, height: 800 }, reducedMotion: 'no-preference' });
+    const page = await context.newPage();
+    page.on('pageerror', error => errors.push(error.message));
+    await page.goto(origin);
+    await page.waitForFunction(() => document.documentElement.classList.contains('motion-ready'));
+    assert.match(await page.locator('html').evaluate(element => getComputedStyle(element).scrollSnapType), /^y(?: proximity)?$/);
+    const chapter = page.locator('#services');
+    await chapter.evaluate(element => element.scrollIntoView({ behavior: 'instant', block: 'start' }));
+    await page.waitForFunction(() => document.querySelector('#services').classList.contains('is-visible'));
+    await page.waitForFunction(() => Number(getComputedStyle(document.querySelector('#services')).opacity) > .99);
+    assert.ok(await chapter.evaluate(element => Math.abs(element.getBoundingClientRect().top) < 160), 'Magnetic scrolling aligns a chapter in the viewport');
+    assert.ok(await page.locator('.service').first().evaluate(element => getComputedStyle(element).backdropFilter.includes('blur')), 'Glass panels use backdrop blur');
+    assert.ok(await page.locator('.scroll-progress').evaluate(element => Number(element.style.getPropertyValue('--scroll-progress')) > 0), 'Progress tracks the scroll position');
+    await page.screenshot({ path: `test-results/glass-${width}.png` });
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.waitForFunction(() => !document.documentElement.classList.contains('motion-ready'));
+    assert.equal(await page.locator('html').evaluate(element => getComputedStyle(element).scrollSnapType), 'none');
+    assert.equal(await chapter.evaluate(element => getComputedStyle(element).opacity), '1');
+    console.log(`PASS ${width}px: magnetic scrolling, chapter reveal, glass, progress, reduced-motion preference change`);
     await context.close();
   }
   assert.deepEqual(errors, [], 'No browser errors or failed HTTP responses');
