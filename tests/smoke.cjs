@@ -53,14 +53,19 @@ async function ready() {
     const frontBox = await cards.nth(0).boundingBox();
     const initialScroll = await page.evaluate(() => scrollY);
     await page.mouse.move(frontBox.x + frontBox.width / 2, frontBox.y + frontBox.height / 2);
-    await page.mouse.wheel(0, 120);
+    await page.mouse.wheel(120, 0);
     await page.waitForFunction(() => document.querySelector('[data-artist="1"]').getAttribute('aria-current') === 'true');
     assert.equal(await page.evaluate(() => scrollY), initialScroll, 'Wheel over cards keeps page position');
-    await page.mouse.wheel(0, 80);
+    await page.mouse.wheel(80, 0);
     assert.equal(await cards.nth(1).getAttribute('aria-current'), 'true', 'Wheel momentum does not switch twice');
     assert.equal(await cards.nth(0).locator('.artist-overlay').evaluate(element => getComputedStyle(element).opacity), '0.38');
     await cards.nth(1).press('ArrowLeft');
     assert.equal(await cards.nth(0).getAttribute('aria-current'), 'true');
+    await page.mouse.wheel(0, 130);
+    await page.waitForFunction(() => scrollY > 0);
+    assert.equal(await cards.nth(0).getAttribute('aria-current'), 'true', 'Vertical wheel scrolls page without switching artists');
+    await page.evaluate(() => window.scrollTo(0, 0));
+    await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
     const popupPromise = page.waitForEvent('popup');
     await cards.nth(0).click();
     const popup = await popupPromise;
@@ -77,9 +82,11 @@ async function ready() {
       await page.waitForFunction(() => document.querySelector('[data-artist="1"]').getAttribute('aria-current') === 'true');
       assert.equal(context.pages().length, 1, 'Swipe does not open an artist tab');
       await cards.nth(1).press('ArrowRight');
-      await page.waitForTimeout(650);
       await page.evaluate(() => window.scrollTo(0, 130));
-      await page.waitForFunction(() => document.querySelector('[data-artist="1"]').getAttribute('aria-current') === 'true');
+      await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+      assert.equal(await cards.nth(0).getAttribute('aria-current'), 'true', 'Page scroll does not change artist');
+      await cards.nth(0).press('ArrowRight');
+      await page.waitForTimeout(360); // Allow the swipe's synthetic-click guard to expire.
       const secondPopupPromise = page.waitForEvent('popup');
       await cards.nth(1).click();
       const secondPopup = await secondPopupPromise;
