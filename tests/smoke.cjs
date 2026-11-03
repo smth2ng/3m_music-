@@ -47,20 +47,49 @@ async function ready() {
     assert.equal(await menu.isVisible(), false);
     assert.equal(await page.evaluate(() => location.hash), '#services');
     await page.evaluate(() => { history.replaceState(null, '', '/'); window.scrollTo(0, 0); });
+    await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
     const cards = page.locator('.artist');
-    const backBox = await cards.nth(1).boundingBox();
-    await cards.nth(1).click({ position: { x: backBox.width / 2, y: 20 } });
-    assert.equal(await cards.nth(1).getAttribute('aria-pressed'), 'true');
+    if (await cards.nth(1).getAttribute('aria-current') === 'true') await cards.nth(1).press('ArrowLeft');
+    const frontBox = await cards.nth(0).boundingBox();
+    const initialScroll = await page.evaluate(() => scrollY);
+    await page.mouse.move(frontBox.x + frontBox.width / 2, frontBox.y + frontBox.height / 2);
+    await page.mouse.wheel(0, 120);
+    await page.waitForFunction(() => document.querySelector('[data-artist="1"]').getAttribute('aria-current') === 'true');
+    assert.equal(await page.evaluate(() => scrollY), initialScroll, 'Wheel over cards keeps page position');
+    await page.mouse.wheel(0, 80);
+    assert.equal(await cards.nth(1).getAttribute('aria-current'), 'true', 'Wheel momentum does not switch twice');
     assert.equal(await cards.nth(0).locator('.artist-overlay').evaluate(element => getComputedStyle(element).opacity), '0.38');
     await cards.nth(1).press('ArrowLeft');
-    assert.equal(await cards.nth(0).getAttribute('aria-pressed'), 'true');
+    assert.equal(await cards.nth(0).getAttribute('aria-current'), 'true');
+    const popupPromise = page.waitForEvent('popup');
+    await cards.nth(0).click();
+    const popup = await popupPromise;
+    await popup.waitForLoadState();
+    assert.ok(popup.url().endsWith('/artists/artist-1.html'));
+    assert.equal(await popup.locator('body').innerText(), '', 'Artist page is intentionally empty');
+    await popup.close();
+    assert.equal(await cards.nth(0).getAttribute('aria-current'), 'true', 'Click opens page without changing the artist');
     if (width === 390) {
       const session = await context.newCDPSession(page);
       await session.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: 270, y: 350 }] });
       await session.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: 160, y: 352 }] });
       await session.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
-      await page.waitForFunction(() => document.querySelector('[data-artist="1"]').getAttribute('aria-pressed') === 'true');
+      await page.waitForFunction(() => document.querySelector('[data-artist="1"]').getAttribute('aria-current') === 'true');
+      assert.equal(context.pages().length, 1, 'Swipe does not open an artist tab');
       await cards.nth(1).press('ArrowRight');
+      await page.waitForTimeout(650);
+      await page.evaluate(() => window.scrollTo(0, 130));
+      await page.waitForFunction(() => document.querySelector('[data-artist="1"]').getAttribute('aria-current') === 'true');
+      const secondPopupPromise = page.waitForEvent('popup');
+      await cards.nth(1).click();
+      const secondPopup = await secondPopupPromise;
+      await secondPopup.waitForLoadState();
+      assert.ok(secondPopup.url().endsWith('/artists/artist-2.html'));
+      assert.equal(await secondPopup.locator('body').innerText(), '');
+      await secondPopup.close();
+      await page.evaluate(() => window.scrollTo(0, 0));
+      await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+      if (await cards.nth(1).getAttribute('aria-current') === 'true') await cards.nth(1).press('ArrowLeft');
     }
     await page.locator('[data-contact]').click();
     assert.equal(await page.locator('dialog').evaluate(element => element.open), true);
@@ -76,7 +105,7 @@ async function ready() {
       await page.mouse.move(0, 0);
       await page.screenshot({ path: `test-results/page-${width}.png`, fullPage: true });
     }
-    console.log(`PASS ${width}px: layout, assets, menu, keyboard carousel, overlay, contact dialog${width === 390 ? ', touch swipe' : ''}`);
+    console.log(`PASS ${width}px: layout, assets, menu, wheel/keyboard carousel, artist tab, overlay, contact dialog${width === 390 ? ', touch swipe, page scroll' : ''}`);
     await context.close();
   }
   assert.deepEqual(errors, [], 'No browser errors or failed HTTP responses');

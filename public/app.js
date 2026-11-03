@@ -19,13 +19,53 @@ function selectArtist(index) {
     const selected = i === active;
     card.classList.toggle('artist--active', selected);
     card.classList.toggle('artist--back', !selected);
-    card.setAttribute('aria-pressed', String(selected));
-    card.setAttribute('aria-label', selected ? 'Артисты на переднем плане. Переключить карточку' : 'Артисты на заднем плане. Показать впереди');
+    if (selected) card.setAttribute('aria-current', 'true');
+    else card.removeAttribute('aria-current');
   });
   document.querySelector('#carousel-status').textContent = `Карточка ${active + 1} из ${cards.length}`;
 }
 let suppressClick = false;
-cards.forEach((card, i) => card.addEventListener('click', () => { if (!suppressClick) selectArtist(i === active ? active + 1 : i); }));
+cards.forEach(card => card.addEventListener('click', event => {
+  if (suppressClick) event.preventDefault();
+}));
+
+// One change per wheel gesture; momentum must not cycle through every card.
+let wheelTimer;
+let wheelChanged = false;
+let wheelDistance = 0;
+carousel.addEventListener('wheel', event => {
+  if (event.ctrlKey || !event.target.closest('.artist')) return;
+  const delta = Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY;
+  if (!delta) return;
+  event.preventDefault();
+  clearTimeout(wheelTimer);
+  wheelTimer = setTimeout(() => { wheelChanged = false; wheelDistance = 0; }, 220);
+  wheelDistance += delta * (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? innerHeight : 1);
+  if (!wheelChanged && Math.abs(wheelDistance) >= 35) {
+    selectArtist(active + Math.sign(wheelDistance));
+    wheelChanged = true;
+  }
+}, { passive: false });
+
+// Native page scrolling also changes the cards, including vertical touch gestures.
+let lastScrollY = window.scrollY;
+let scrollDistance = 0;
+let lastScrollChange = 0;
+window.addEventListener('scroll', () => {
+  const delta = window.scrollY - lastScrollY;
+  lastScrollY = window.scrollY;
+  const bounds = cards[active].getBoundingClientRect();
+  if (bounds.bottom < 80 || bounds.top > innerHeight - 80 || !menu.hidden || dialog.open) {
+    scrollDistance = 0; return;
+  }
+  if (Math.sign(delta) !== Math.sign(scrollDistance)) scrollDistance = 0;
+  scrollDistance += delta;
+  if (Math.abs(scrollDistance) >= 110 && performance.now() - lastScrollChange > 600) {
+    selectArtist(active + Math.sign(scrollDistance));
+    scrollDistance = 0;
+    lastScrollChange = performance.now();
+  }
+}, { passive: true });
 carousel.addEventListener('keydown', event => {
   if (event.key === 'ArrowRight' || event.key === 'ArrowLeft') {
     event.preventDefault(); selectArtist(active + (event.key === 'ArrowRight' ? 1 : -1));

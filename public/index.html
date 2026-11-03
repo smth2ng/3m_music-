@@ -23,9 +23,9 @@
       </nav>
     </header>
     <div class="artists" role="region" aria-roledescription="карусель" aria-label="Артисты" tabindex="0">
-      <p class="sr-only" id="carousel-help">Нажмите на карточку или используйте стрелки влево и вправо, чтобы сменить артиста. На телефоне можно листать свайпом.</p>
-      <button type="button" class="artist artist--active" data-artist="0" aria-pressed="true" aria-label="Артисты на переднем плане. Переключить карточку" aria-describedby="carousel-help"><img src="./assets/artists-front.webp" alt="Музыкальная группа: четыре участника в прыжке" width="1462" height="1076" fetchpriority="high" draggable="false"><span class="artist-overlay"></span></button>
-      <button type="button" class="artist artist--back" data-artist="1" aria-pressed="false" aria-label="Артисты на заднем плане. Показать впереди" aria-describedby="carousel-help"><img src="./assets/artists-back.webp" alt="Музыкальная группа: четыре участника" width="1075" height="1463" draggable="false"><span class="artist-overlay"></span></button>
+      <p class="sr-only" id="carousel-help">Листайте артистов прокруткой, свайпом или стрелками влево и вправо. Нажмите на карточку, чтобы открыть страницу артиста в новой вкладке.</p>
+      <a href="./artists/artist-1.html" target="_blank" rel="noopener noreferrer" class="artist artist--active" data-artist="0" aria-current="true" aria-label="Открыть страницу артиста 1 в новой вкладке" aria-describedby="carousel-help"><img src="./assets/artists-front.webp" alt="Музыкальная группа: четыре участника в прыжке" width="1462" height="1076" fetchpriority="high" draggable="false"><span class="artist-overlay"></span></a>
+      <a href="./artists/artist-2.html" target="_blank" rel="noopener noreferrer" class="artist artist--back" data-artist="1" aria-label="Открыть страницу артиста 2 в новой вкладке" aria-describedby="carousel-help"><img src="./assets/artists-back.webp" alt="Музыкальная группа: четыре участника" width="1075" height="1463" draggable="false"><span class="artist-overlay"></span></a>
       <span class="sr-only" id="carousel-status" aria-live="polite">Карточка 1 из 2</span>
     </div>
     <button class="cta" type="button" data-contact>Оставить заявку</button>
