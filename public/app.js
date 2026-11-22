@@ -6,6 +6,7 @@ function selectArtist(index) {
   active = (index + cards.length) % cards.length;
   cards.forEach((card, i) => {
     const selected = i === active;
+    card.hidden = cards.length > 2 && !selected && i !== (active + 1) % cards.length;
     card.classList.toggle('artist--active', selected);
     card.classList.toggle('artist--back', !selected);
     if (selected) card.setAttribute('aria-current', 'true');

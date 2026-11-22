@@ -3,3 +3,5 @@ await rm('dist', { recursive: true, force: true });
 await mkdir('dist');
 await cp('public', 'dist', { recursive: true });
 console.log('Static website built in dist/');
+const { buildArtists } = await import('./artists.mjs');
+await buildArtists();

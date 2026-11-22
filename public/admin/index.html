@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="ru">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Артисты — управление</title><link rel="stylesheet" href="../style.css"><script src="./admin.js" defer></script></head>
+<body><main class="admin-page">
+<a class="text-link" href="../index.html">← На сайт</a><h1>Управление артистами</h1>
+<form id="login"><label>Токен GitHub<input id="token" type="password" required autocomplete="off"></label><p>Токен должен иметь доступ Contents — Read and write к smth2ng/3m_music-. Он хранится только в памяти вкладки.</p><button class="cta">Войти</button></form>
+<p id="status" role="status" aria-live="polite"></p>
+<section id="workspace" hidden><button id="logout" type="button">Выйти</button><div id="artist-list"></div><button id="new" type="button">Добавить артиста</button>
+<form id="editor" hidden>
+<h2 id="editor-title">Новый артист</h2>
+<label>Название<input name="name" required maxlength="160"></label>
+<label>Описание<textarea name="description" rows="5" maxlength="10000"></textarea></label>
+<label>Главное фото<input name="photo" type="file" accept="image/png,image/jpeg,image/webp"></label><img id="photo-preview" class="admin-preview" alt="Главное фото" hidden>
+<label>Логотип вместо названия<input name="logo" type="file" accept="image/png,image/jpeg,image/webp"></label><label><input name="removeLogo" type="checkbox"> Удалить логотип</label>
+<label>Дополнительные фотографии<input name="photos" type="file" accept="image/png,image/jpeg,image/webp" multiple></label><p>Новые фотографии добавляются к существующим.</p><div id="gallery-list"></div>
+<label>Ссылка на видео<input name="video" type="url" placeholder="https://…"></label>
+<label>Платформы для прослушивания<textarea name="links" rows="5" placeholder="Яндекс Музыка | https://music.yandex.ru/…&#10;VK Музыка | https://vk.com/…"></textarea></label><p>По одной ссылке в строке — название платформы, знак | и HTTPS-адрес.</p>
+<div class="admin-actions"><button class="cta" type="submit">Сохранить</button><button id="cancel" type="button">Отмена</button><button id="delete" type="button">Удалить артиста</button></div>
+</form></section>
+</main></body></html>
