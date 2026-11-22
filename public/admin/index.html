@@ -27,13 +27,15 @@
 <section class="teacher-admin" aria-labelledby="teacher-admin-title">
 <h2 id="teacher-admin-title">Преподаватели</h2>
 <div id="teacher-admin-list" class="admin-actions"></div>
+<button id="teacher-new" type="button">Добавить преподавателя</button>
 <form id="teacher-editor" hidden>
+<h3 id="teacher-editor-title">Новый преподаватель</h3>
 <label>Имя<input name="name" required maxlength="160"></label>
 <label>Фото<input name="photo" type="file" accept="image/png,image/jpeg,image/webp"></label>
 <img id="teacher-photo-preview" class="admin-preview" alt="Фото преподавателя" hidden>
 <label><input name="removePhoto" type="checkbox"> Удалить фото</label>
 <label>Описание<textarea name="description" rows="5" maxlength="10000"></textarea></label>
-<div class="admin-actions"><button class="cta" type="submit">Сохранить преподавателя</button><button id="teacher-cancel" type="button">Отмена</button></div>
+<div class="admin-actions"><button class="cta" type="submit">Сохранить преподавателя</button><button id="teacher-cancel" type="button">Отмена</button><button id="teacher-delete" type="button" hidden>Удалить преподавателя</button></div>
 </form>
 </section></section>
 </main></body></html>
