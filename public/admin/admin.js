@@ -1,7 +1,6 @@
-const apiRoot = 'https://api.github.com/repos/smth2ng/3m_music-';
+const apiRoot = '/api/admin/github';
 const editor = document.querySelector('#editor');
 const status = document.querySelector('#status');
-let token = '';
 let artists = [];
 let head = '';
 let editing = null;
@@ -10,11 +9,22 @@ let busy = false;
 async function api(path, method = 'GET', body) {
   const response = await fetch(apiRoot + path, {
     method,
-    headers: { Authorization: 'Bearer ' + token, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json' },
+    headers: { Accept: 'application/vnd.github+json', 'Content-Type': 'application/json' },
     body: body ? JSON.stringify(body) : undefined,
     cache: 'no-store'
   });
-  if (!response.ok) throw new Error('GitHub: ' + response.status + (response.status === 409 || response.status === 422 ? '. Данные изменились. Выйдите и войдите снова перед сохранением.' : '. Проверьте доступ токена и соединение.'));
+  if (!response.ok) {
+    const details = await response.json().catch(() => ({}));
+    let advice = 'Проверьте соединение и настройки сервера.';
+    if (response.status === 403) {
+      advice = 'Проверьте на сервере разрешение токена Contents — Read and write и ограничения ветки main.';
+      if (response.headers.get('x-ratelimit-remaining') === '0') {
+        advice = 'Лимит запросов GitHub исчерпан. Повторите сохранение после восстановления лимита.';
+      }
+    }
+    if (response.status === 401) advice = 'Войдите по паролю. Если ошибка повторяется после входа, проверьте серверный токен GitHub.';
+    throw new Error('GitHub ' + response.status + ' (' + method + ' ' + path.split('?')[0] + '). ' + (details.message ? details.message + '. ' : '') + advice);
+  }
   return response.json();
 }
 async function load() {
@@ -114,9 +124,11 @@ async function save(next, tree) {
 document.querySelector('#login').addEventListener('submit', event => {
   event.preventDefault();
   task(async () => {
-    token = document.querySelector('#token').value.trim();
+    const response = await fetch('/api/admin/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password: document.querySelector('#password').value }) });
+    const result = await response.json();
+    if (!response.ok) throw new Error(result.message);
     await load();
-    document.querySelector('#token').value = '';
+    document.querySelector('#password').value = '';
     document.querySelector('#login').hidden = true;
     document.querySelector('#workspace').hidden = false;
     render();
@@ -125,8 +137,9 @@ document.querySelector('#login').addEventListener('submit', event => {
 });
 document.querySelector('#new').onclick = () => open();
 document.querySelector('#cancel').onclick = () => { editor.hidden = true; };
-document.querySelector('#logout').onclick = () => {
-  token = '';
+document.querySelector('#logout').onclick = () => task(async () => {
+  const response = await fetch('/api/admin/logout', { method: 'POST' });
+  if (!response.ok && response.status !== 401) throw new Error('Не удалось завершить сеанс. Повторите выход.');
   artists = [];
   editing = null;
   editor.reset();
@@ -134,7 +147,7 @@ document.querySelector('#logout').onclick = () => {
   document.querySelector('#workspace').hidden = true;
   document.querySelector('#login').hidden = false;
   status.textContent = 'Вы вышли.';
-};
+});
 editor.addEventListener('submit', event => {
   event.preventDefault();
   task(async () => {
