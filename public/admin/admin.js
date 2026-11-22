@@ -1,3 +1,4 @@
+import { setupTeachers } from './teachers.js';
 const demoMode = true;
 const demoKey = '3m-artists-demo';
 const apiRoot = '/api/admin/github';
@@ -157,6 +158,7 @@ document.querySelector('#login').addEventListener('submit', event => {
     if (!response.ok) throw new Error(result.message);
     }
     await load();
+    await setupTeachers();
     document.querySelector('#password').value = '';
     document.querySelector('#login').hidden = true;
     document.querySelector('#workspace').hidden = false;
@@ -175,6 +177,7 @@ document.querySelector('#logout').onclick = () => task(async () => {
   editing = null;
   editor.reset();
   editor.hidden = true;
+  document.querySelector('#teacher-editor').hidden = true;
   document.querySelector('#workspace').hidden = true;
   document.querySelector('#login').hidden = false;
   status.textContent = 'Вы вышли.';

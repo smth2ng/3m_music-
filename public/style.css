@@ -857,3 +857,9 @@ body::before {
   .contacts { grid-template-columns: 1fr; }
   .map-frame { height: 320px; }
 }
+
+.teacher-admin { margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--glass-edge); }
+.teacher-list .teacher { display: flex; align-items: start; gap: 16px; min-height: 210px; }
+.teacher-copy { flex: 1; min-width: 0; }
+.teacher-copy p { margin-top: 12px; white-space: pre-wrap; overflow-wrap: anywhere; }
+.teacher-list .teacher img { position: static; width: 42%; max-width: 190px; height: auto; align-self: end; }

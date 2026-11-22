@@ -1,0 +1,6 @@
+{
+  "teachers": [
+    { "id": "mikhail-grishin", "name": "Михаил Гришин", "description": "", "photo": "assets/mikhail-grishin.webp" },
+    { "id": "polina-gevel", "name": "Полина Гевель", "description": "", "photo": "" }
+  ]
+}
