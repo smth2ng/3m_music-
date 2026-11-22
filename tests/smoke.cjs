@@ -36,9 +36,12 @@ async function ready() {
     }
     const menu = page.getByRole('navigation', { name: 'Основная навигация' });
     assert.equal(await menu.getByRole('link', { name: 'Главная' }).getAttribute('aria-current'), 'page');
-    await menu.getByRole('link', { name: 'О студии' }).click();
-    await page.waitForURL('**/studio.html');
-    assert.equal(await menu.getByRole('link', { name: 'О студии' }).getAttribute('aria-current'), 'page');
+    await menu.getByRole('link', { name: 'Артисты' }).click();
+    await page.waitForURL('**/#artists');
+    await menu.getByRole('link', { name: 'Услуги' }).click();
+    await page.waitForURL('**/studio.html#services');
+    await menu.getByRole('link', { name: 'Преподаватели' }).click();
+    await page.waitForURL('**/studio.html#teachers');
     assert.equal(await page.getByRole('heading', { level: 1 }).innerText(), 'О студии');
     assert.equal(await page.locator('#teachers .teacher').count(), 2);
     assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true, `Studio fits at ${width}px`);

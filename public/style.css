@@ -699,3 +699,9 @@ body::before {
     grid-template-columns: 1fr;
   }
 }
+
+@media (max-width: 520px) {
+  .hero-heading {
+    top: 136px;
+  }
+}
