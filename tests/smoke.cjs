@@ -39,7 +39,9 @@ async function ready() {
     await menu.getByRole('link', { name: 'Артисты' }).click();
     await page.waitForURL('**/artists.html');
     await menu.getByRole('link', { name: 'Услуги' }).click();
-    await page.waitForURL('**/services.html');
+    await page.waitForURL('**/index.html#services');
+    assert.equal(await page.locator('#services .service').count(), 3);
+    assert.equal(await page.locator('#journey .steps li').count(), 4);
     await menu.getByRole('link', { name: 'Преподаватели' }).click();
     await page.waitForURL('**/teachers.html');
     assert.equal(await page.getByRole('heading', { level: 1 }).innerText(), 'Преподаватели');
