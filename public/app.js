@@ -1,5 +1,5 @@
 const carousel = document.querySelector('.artists');
-const cards = [...document.querySelectorAll('.artist')];
+let cards = [...document.querySelectorAll('.artist')];
 const carouselStatus = document.querySelector('#carousel-status');
 let active = 0;
 function selectArtist(index) {
@@ -20,9 +20,15 @@ function selectArtist(index) {
 }
 selectArtist(0);
 let suppressClick = false;
-cards.forEach(card => card.addEventListener('click', event => {
-  if (suppressClick) event.preventDefault();
-}));
+carousel.addEventListener('click', event => {
+  if (suppressClick && event.target.closest('.artist')) event.preventDefault();
+});
+document.addEventListener('artists-updated', () => {
+  const selectedId = cards[active]?.dataset.managedArtist;
+  cards = [...carousel.querySelectorAll('.artist')];
+  const selectedIndex = selectedId ? cards.findIndex(card => card.dataset.managedArtist === selectedId) : active;
+  selectArtist(selectedIndex >= 0 && selectedIndex < cards.length ? selectedIndex : 0);
+});
 
 // One change per wheel gesture; momentum must not cycle through every card.
 let wheelTimer;

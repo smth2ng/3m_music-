@@ -1,5 +1,5 @@
 // Demo data is scoped to the current browser and overrides the published snapshot.
-(() => {
+function refreshArtists() {
   let artists;
   try {
     const saved = localStorage.getItem('3m-artists-demo');
@@ -45,4 +45,11 @@
   }
   const status = document.querySelector('#carousel-status');
   if (status) status.textContent = 'Карточка 1 из ' + document.querySelectorAll('.artist').length;
-})();
+  document.dispatchEvent(new Event('artists-updated'));
+}
+refreshArtists();
+window.addEventListener('storage', event => {
+  if (event.key === '3m-artists-demo' || event.key === null) refreshArtists();
+});
+window.addEventListener('pageshow', event => { if (event.persisted) refreshArtists(); });
+document.addEventListener('visibilitychange', () => { if (!document.hidden) refreshArtists(); });
