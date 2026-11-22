@@ -825,3 +825,8 @@ body::before {
   .artists .artist--left { left: 0; }
   .artists .artist--right { left: 78%; }
 }
+
+.artists .artist {
+  transition: none;
+  transform-origin: top left;
+}

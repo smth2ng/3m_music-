@@ -2,7 +2,12 @@ const carousel = document.querySelector('.artists');
 let cards = [...document.querySelectorAll('.artist')];
 const carouselStatus = document.querySelector('#carousel-status');
 let active = 0;
-function selectArtist(index) {
+function selectArtist(index, animate = true) {
+  const previous = cards.map(card => {
+    const bounds = card.getBoundingClientRect();
+    card.getAnimations().forEach(animation => animation.cancel());
+    return { bounds, visible: !card.hidden, side: card.classList.contains('artist--left') ? -1 : card.classList.contains('artist--right') ? 1 : 0 };
+  });
   active = (index + cards.length) % cards.length;
   cards.forEach((card, i) => {
     const selected = i === active;
@@ -15,10 +20,25 @@ function selectArtist(index) {
     card.classList.toggle('artist--back', !selected);
     if (selected) card.setAttribute('aria-current', 'true');
     else card.removeAttribute('aria-current');
+    if (animate && !card.hidden && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const before = previous[i];
+      const after = card.getBoundingClientRect();
+      const side = left ? -1 : right ? 1 : 0;
+      const wraps = before.side && side && before.side !== side;
+      const enters = !before.visible || wraps;
+      const offset = enters ? side * after.width * .35 : before.bounds.left - after.left;
+      const top = enters ? 0 : before.bounds.top - after.top;
+      const scaleX = enters ? .9 : before.bounds.width / after.width;
+      const scaleY = enters ? .9 : before.bounds.height / after.height;
+      card.animate([
+        { transform: 'translate(' + offset + 'px,' + top + 'px) scale(' + scaleX + ',' + scaleY + ')', opacity: enters ? 0 : 1 },
+        { transform: 'translate(0,0) scale(1)', opacity: 1 }
+      ], { duration: 360, easing: 'cubic-bezier(.2,.7,.2,1)' });
+    }
   });
   carouselStatus.textContent = `Карточка ${active + 1} из ${cards.length}`;
 }
-selectArtist(0);
+selectArtist(0, false);
 let suppressClick = false;
 carousel.addEventListener('click', event => {
   if (suppressClick && event.target.closest('.artist')) event.preventDefault();
@@ -27,20 +47,27 @@ document.addEventListener('artists-updated', () => {
   const selectedId = cards[active]?.dataset.managedArtist;
   cards = [...carousel.querySelectorAll('.artist')];
   const selectedIndex = selectedId ? cards.findIndex(card => card.dataset.managedArtist === selectedId) : active;
-  selectArtist(selectedIndex >= 0 && selectedIndex < cards.length ? selectedIndex : 0);
+  selectArtist(selectedIndex >= 0 && selectedIndex < cards.length ? selectedIndex : 0, false);
 });
 
 // One change per wheel gesture; momentum must not cycle through every card.
 let wheelTimer;
 let wheelChanged = false;
 let wheelDistance = 0;
+let wheelDirection = 0;
 carousel.addEventListener('wheel', event => {
   if (event.ctrlKey || !event.target.closest('.artist')) return;
   if (Math.abs(event.deltaX) <= Math.abs(event.deltaY)) return;
   const delta = event.deltaX;
   event.preventDefault();
+  const direction = Math.sign(delta);
+  if (direction && wheelDirection && direction !== wheelDirection) {
+    wheelChanged = false;
+    wheelDistance = 0;
+  }
+  wheelDirection = direction;
   clearTimeout(wheelTimer);
-  wheelTimer = setTimeout(() => { wheelChanged = false; wheelDistance = 0; }, 220);
+  wheelTimer = setTimeout(() => { wheelChanged = false; wheelDistance = 0; }, 140);
   wheelDistance += delta * (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? carousel.clientWidth : 1);
   if (!wheelChanged && Math.abs(wheelDistance) >= 35) {
     selectArtist(active + Math.sign(wheelDistance));
