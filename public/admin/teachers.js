@@ -35,11 +35,22 @@ export async function setupTeachers() {
   function render() {
     list.replaceChildren();
     for (const teacher of teachers) {
-      const button = document.createElement('button');
-      button.type = 'button';
-      button.textContent = teacher.name;
-      button.onclick = () => openTeacher(teacher);
-      list.append(button);
+      const row = document.createElement('div');
+      row.className = 'teacher-admin-row panel';
+      const name = document.createElement('strong');
+      name.textContent = teacher.name;
+      const edit = document.createElement('button');
+      edit.type = 'button';
+      edit.textContent = 'Редактировать';
+      edit.setAttribute('aria-label', 'Редактировать — ' + teacher.name);
+      edit.onclick = () => openTeacher(teacher);
+      const remove = document.createElement('button');
+      remove.type = 'button';
+      remove.textContent = 'Удалить';
+      remove.setAttribute('aria-label', 'Удалить — ' + teacher.name);
+      remove.onclick = () => deleteTeacher(teacher);
+      row.append(name, edit, remove);
+      list.append(row);
     }
   }
   form.onchange = () => {
@@ -76,12 +87,15 @@ export async function setupTeachers() {
     finally { submit.disabled = false; }
   };
   document.querySelector('#teacher-new').onclick = () => openTeacher();
-  document.querySelector('#teacher-delete').onclick = () => {
-    if (!selected || !confirm('Удалить преподавателя «' + selected.name + '»?')) return;
+  function deleteTeacher(teacher) {
+    if (!confirm('Удалить преподавателя «' + teacher.name + '»?')) return;
     try {
-      persist(teachers.filter(teacher => teacher.id !== selected.id));
+      persist(teachers.filter(item => item.id !== teacher.id));
       document.querySelector('#status').textContent = 'Преподаватель удалён в этом браузере.';
     } catch (error) { document.querySelector('#status').textContent = error.message; }
+  }
+  document.querySelector('#teacher-delete').onclick = () => {
+    if (selected) deleteTeacher(selected);
   };
   document.querySelector('#teacher-cancel').onclick = () => { form.hidden = true; };
   render();

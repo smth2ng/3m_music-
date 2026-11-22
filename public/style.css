@@ -863,3 +863,14 @@ body::before {
 .teacher-copy { flex: 1; min-width: 0; }
 .teacher-copy p { margin-top: 12px; white-space: pre-wrap; overflow-wrap: anywhere; }
 .teacher-list .teacher img { position: static; width: 42%; max-width: 190px; height: auto; align-self: end; }
+
+.teacher-admin-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 16px;
+  border-radius: 14px;
+}
+.teacher-admin-row strong { flex: 1 1 200px; }

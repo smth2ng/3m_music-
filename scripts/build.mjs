@@ -9,6 +9,22 @@ await buildArtists();
 // Tie asset URLs to their contents so browsers load matching scripts and styles.
 const { createHash } = await import('node:crypto');
 const { readdir, readFile, writeFile } = await import('node:fs/promises');
+const { resolve, dirname } = await import('node:path');
+const moduleHashes = new Map();
+async function versionModule(path) {
+  if (moduleHashes.has(path)) return moduleHashes.get(path);
+  let code = await readFile(path, 'utf8');
+  const imports = [...code.matchAll(/\bfrom\s+['"]((?:\.\.\/|\.\/)[^'"?]+\.js)['"]/g)];
+  for (const match of imports) {
+    const hash = await versionModule(resolve(dirname(path), match[1]));
+    code = code.replaceAll("'" + match[1] + "'", "'" + match[1] + '?v=' + hash + "'")
+      .replaceAll('"' + match[1] + '"', '"' + match[1] + '?v=' + hash + '"');
+  }
+  await writeFile(path, code);
+  const hash = createHash('sha256').update(code).digest('hex').slice(0, 12);
+  moduleHashes.set(path, hash);
+  return hash;
+}
 async function versionAssets(directory) {
   for (const entry of await readdir(directory, { withFileTypes: true })) {
     const path = directory + '/' + entry.name;
@@ -19,9 +35,9 @@ async function versionAssets(directory) {
       const matches = [...html.matchAll(/(?:src|href)="((?:\.\.\/|\.\/)[^"?]+\.(?:js|css))"/g)];
       let updated = html;
       for (const match of matches) {
-        const { resolve } = await import('node:path');
-        const asset = await readFile(resolve(directory, match[1]));
-        const hash = createHash('sha256').update(asset).digest('hex').slice(0, 12);
+        const assetPath = resolve(directory, match[1]);
+        const hash = assetPath.endsWith('.js') ? await versionModule(assetPath)
+          : createHash('sha256').update(await readFile(assetPath)).digest('hex').slice(0, 12);
         updated = updated.replaceAll('"' + match[1] + '"', '"' + match[1] + '?v=' + hash + '"');
       }
       await writeFile(path, updated);
