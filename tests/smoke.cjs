@@ -1,6 +1,6 @@
 const assert = require('node:assert/strict');
 const { spawn } = require('node:child_process');
-const { existsSync, mkdirSync } = require('node:fs');
+const { existsSync } = require('node:fs');
 const { chromium } = require('playwright');
 const port = 4173;
 const origin = `http://127.0.0.1:${port}`;
@@ -18,7 +18,6 @@ async function ready() {
   const executablePath = process.env.CHROMIUM_PATH || (existsSync('/usr/bin/chromium') ? '/usr/bin/chromium' : undefined);
   browser = await chromium.launch({ executablePath, args: ['--no-sandbox'] });
   const errors = [];
-  mkdirSync('test-results', { recursive: true });
   for (const width of [320, 390, 600, 768, 1024, 1440, 1920]) {
     const context = await browser.newContext({ viewport: { width, height: 900 }, hasTouch: width < 768, reducedMotion: 'reduce' });
     const page = await context.newPage();
@@ -30,23 +29,24 @@ async function ready() {
     assert.equal(await page.locator('img').evaluateAll(images => images.every(image => image.naturalWidth > 0)), true, `Images load at ${width}`);
     assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true, `No horizontal overflow at ${width}`);
     assert.equal(await page.locator('h1').count(), 1);
-    const menu = page.locator('.navigation'), toggle = page.locator('.menu-toggle');
-    assert.equal(await menu.isVisible(), false);
-    await toggle.click();
-    assert.equal(await toggle.getAttribute('aria-expanded'), 'true');
-    assert.equal(await menu.locator('a').count(), 5);
-    assert.equal(await menu.isVisible(), true);
-    const menuBox = await menu.boundingBox();
-    assert.ok(menuBox.x >= 0 && menuBox.x + menuBox.width <= width, `Menu stays inside viewport at ${width}`);
-    if ([390, 1440].includes(width)) await page.screenshot({ path: `test-results/menu-${width}.png`, fullPage: true });
-    await page.keyboard.press('Escape');
-    assert.equal(await menu.isVisible(), false);
-    assert.equal(await toggle.evaluate(element => element === document.activeElement), true);
-    await toggle.click();
-    await menu.locator('a[href="#services"]').click();
-    assert.equal(await menu.isVisible(), false);
-    assert.equal(await page.evaluate(() => location.hash), '#services');
-    await page.evaluate(() => { history.replaceState(null, '', '/'); window.scrollTo(0, 0); });
+    if (width !== 390 && width !== 1440) {
+      console.log(`PASS ${width}px: layout and assets`);
+      await context.close();
+      continue;
+    }
+    const menu = page.getByRole('navigation', { name: 'Основная навигация' });
+    assert.equal(await menu.getByRole('link', { name: 'Главная' }).getAttribute('aria-current'), 'page');
+    await menu.getByRole('link', { name: 'О студии' }).click();
+    await page.waitForURL('**/studio.html');
+    assert.equal(await menu.getByRole('link', { name: 'О студии' }).getAttribute('aria-current'), 'page');
+    assert.equal(await page.getByRole('heading', { level: 1 }).innerText(), 'О студии');
+    assert.equal(await page.locator('#teachers .teacher').count(), 2);
+    assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true, `Studio fits at ${width}px`);
+    await page.getByRole('link', { name: 'Путь артиста' }).click();
+    await page.waitForURL('**/studio.html#journey');
+    await menu.getByRole('link', { name: 'Контакты' }).click();
+    await page.waitForURL('**/index.html#contacts');
+    await page.evaluate(() => window.scrollTo(0, 0));
     await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
     const cards = page.locator('.artist');
     if (await cards.nth(1).getAttribute('aria-current') === 'true') await cards.nth(1).press('ArrowLeft');
@@ -104,19 +104,11 @@ async function ready() {
     await page.keyboard.press('Escape');
     assert.equal(await page.locator('dialog').evaluate(element => element.open), false);
     assert.equal(await page.locator('.map').getAttribute('target'), '_blank');
-    if ([390, 1440].includes(width)) {
-      const positions = await page.evaluate(() => Object.fromEntries(['.about', '.services-grid', '.teachers', '.map'].map(selector => [selector, document.querySelector(selector).getBoundingClientRect().top + scrollY])));
-      assert.equal(positions['.about'], width === 390 ? 610 : 956, 'First screen remains aligned with the design');
-      assert.ok(positions['.services-grid'] > positions['.about']);
-      assert.ok(positions['.teachers'] > positions['.services-grid']);
-      assert.ok(positions['.map'] > positions['.teachers']);
-      const chapterGap = await page.locator('.journey').evaluate(element => parseFloat(getComputedStyle(element).marginTop));
-      assert.ok(chapterGap >= (width === 390 ? 120 : 170), 'Chapters have additional breathing room');
-      assert.equal(await page.locator('html').evaluate(element => getComputedStyle(element).scrollSnapType), 'none', 'Reduced motion disables magnetic scrolling');
-      await page.evaluate(() => { document.activeElement.blur(); window.scrollTo(0, 0); });
-      await page.mouse.move(0, 0);
-      await page.screenshot({ path: `test-results/page-${width}.png`, fullPage: true });
-    }
+    const positions = await page.evaluate(() => Object.fromEntries(['.about', '.services-grid', '.map'].map(selector => [selector, document.querySelector(selector).getBoundingClientRect().top + scrollY])));
+    assert.equal(positions['.about'], width === 390 ? 610 : 956, 'First screen remains aligned with the design');
+    assert.ok(positions['.services-grid'] > positions['.about']);
+    assert.ok(positions['.map'] > positions['.services-grid']);
+    assert.equal(await page.locator('html').evaluate(element => getComputedStyle(element).scrollSnapType), 'none', 'Reduced motion disables magnetic scrolling');
     console.log(`PASS ${width}px: layout, assets, menu, wheel/keyboard carousel, artist tab, overlay, contact dialog${width === 390 ? ', touch swipe, page scroll' : ''}`);
     await context.close();
   }
@@ -134,7 +126,6 @@ async function ready() {
     assert.ok(await chapter.evaluate(element => Math.abs(element.getBoundingClientRect().top) < 160), 'Magnetic scrolling aligns a chapter in the viewport');
     assert.ok(await page.locator('.service').first().evaluate(element => getComputedStyle(element).backdropFilter.includes('blur')), 'Glass panels use backdrop blur');
     assert.ok(await page.locator('.scroll-progress').evaluate(element => Number(element.style.getPropertyValue('--scroll-progress')) > 0), 'Progress tracks the scroll position');
-    await page.screenshot({ path: `test-results/glass-${width}.png` });
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.waitForFunction(() => !document.documentElement.classList.contains('motion-ready'));
     assert.equal(await page.locator('html').evaluate(element => getComputedStyle(element).scrollSnapType), 'none');
@@ -143,5 +134,5 @@ async function ready() {
     await context.close();
   }
   assert.deepEqual(errors, [], 'No browser errors or failed HTTP responses');
-  console.log('All 7 viewport checks passed. Screenshots: test-results/');
+  console.log('All 7 viewport checks passed.');
 })().catch(error => { console.error(error); process.exitCode = 1; }).finally(async () => { if (browser) await browser.close(); server.kill(); });

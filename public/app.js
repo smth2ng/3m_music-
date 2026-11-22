@@ -1,17 +1,6 @@
-const menuButton = document.querySelector('.menu-toggle');
-const menu = document.querySelector('.navigation');
-function setMenu(open, returnFocus = false) {
-  menuButton.setAttribute('aria-expanded', String(open));
-  menuButton.setAttribute('aria-label', open ? 'Закрыть меню' : 'Открыть меню');
-  menu.hidden = !open;
-  if (returnFocus) menuButton.focus();
-}
-menuButton.addEventListener('click', () => setMenu(menu.hidden));
-menu.addEventListener('click', event => { if (event.target.closest('a')) setMenu(false); });
-document.addEventListener('click', event => { if (!event.target.closest('.navigation, .menu-toggle')) setMenu(false); });
-document.addEventListener('keydown', event => { if (event.key === 'Escape' && !menu.hidden) setMenu(false, true); });
 const carousel = document.querySelector('.artists');
 const cards = [...document.querySelectorAll('.artist')];
+const carouselStatus = document.querySelector('#carousel-status');
 let active = 0;
 function selectArtist(index) {
   active = (index + cards.length) % cards.length;
@@ -22,7 +11,7 @@ function selectArtist(index) {
     if (selected) card.setAttribute('aria-current', 'true');
     else card.removeAttribute('aria-current');
   });
-  document.querySelector('#carousel-status').textContent = `Карточка ${active + 1} из ${cards.length}`;
+  carouselStatus.textContent = `Карточка ${active + 1} из ${cards.length}`;
 }
 let suppressClick = false;
 cards.forEach(card => card.addEventListener('click', event => {
@@ -74,19 +63,23 @@ dialog.addEventListener('click', event => { if (event.target === dialog) {
 
 // Progressive enhancement: content remains visible without JS or with reduced motion.
 const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
-const chapters = [...document.querySelectorAll('.page > section:not(.hero), .page > footer')];
+const chapters = [...document.querySelectorAll('.page > section:not(.hero)')];
 let chapterObserver;
 function configureMotion() {
   chapterObserver?.disconnect();
   document.documentElement.classList.remove('motion-ready');
   if (motionPreference.matches || !('IntersectionObserver' in window)) return;
-  chapters.forEach(chapter => {
-    chapter.classList.add('motion-section');
-    chapter.querySelectorAll('.service, .steps li, .teacher').forEach((item, index) => {
-      item.style.setProperty('--reveal-order', index);
-    });
+  const viewportBottom = innerHeight * .92;
+  const initiallyVisible = chapters.map(chapter => {
     const bounds = chapter.getBoundingClientRect();
-    chapter.classList.toggle('is-visible', bounds.top < innerHeight * .92 && bounds.bottom > 0);
+    return bounds.top < viewportBottom && bounds.bottom > 0;
+  });
+  chapters.forEach((chapter, index) => {
+    chapter.classList.add('motion-section');
+    chapter.querySelectorAll('.service').forEach((item, order) => {
+      item.style.setProperty('--reveal-order', order);
+    });
+    chapter.classList.toggle('is-visible', initiallyVisible[index]);
   });
   chapterObserver = new IntersectionObserver(entries => {
     entries.forEach(entry => entry.target.classList.toggle('is-visible', entry.isIntersecting));
