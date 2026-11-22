@@ -1,3 +1,5 @@
+const demoMode = true;
+const demoKey = '3m-artists-demo';
 const apiRoot = '/api/admin/github';
 const editor = document.querySelector('#editor');
 const status = document.querySelector('#status');
@@ -28,6 +30,13 @@ async function api(path, method = 'GET', body) {
   return response.json();
 }
 async function load() {
+  if (demoMode) {
+    const saved = localStorage.getItem(demoKey);
+    const response = saved ? null : await fetch('../data/artists.json');
+    if (response && !response.ok) throw new Error('Не удалось загрузить артистов.');
+    artists = saved ? JSON.parse(saved).artists : (await response.json()).artists;
+    return;
+  }
   const ref = await api('/git/ref/heads/main');
   head = ref.object.sha;
   const file = await api('/contents/public/data/artists.json?ref=' + head);
@@ -57,7 +66,7 @@ function open(artist = null) {
   document.querySelector('#delete').hidden = !artist;
   const preview = document.querySelector('#photo-preview');
   preview.hidden = !artist;
-  preview.src = artist ? '../' + artist.photo : '';
+  preview.src = artist ? (artist.photo.startsWith('data:image/') ? artist.photo : '../' + artist.photo) : '';
   retainedPhotos = [...(artist?.photos ?? [])];
   const gallery = document.querySelector('#gallery-list');
   gallery.replaceChildren();
@@ -70,7 +79,7 @@ function open(artist = null) {
       retainedPhotos = check.checked ? [...retainedPhotos, path] : retainedPhotos.filter(photo => photo !== path);
     });
     const image = document.createElement('img');
-    image.src = '../' + path;
+    image.src = path.startsWith('data:image/') ? path : '../' + path;
     image.alt = 'Сохранить фотографию';
     image.className = 'admin-preview';
     label.append(check, image);
@@ -102,6 +111,7 @@ async function upload(file, tree) {
     reader.onerror = () => reject(new Error('Не удалось прочитать фотографию.'));
     reader.readAsDataURL(file);
   });
+  if (demoMode) return 'data:' + file.type + ';base64,' + data;
   const blob = await api('/git/blobs', 'POST', { content: data, encoding: 'base64' });
   const extension = { 'image/png': 'png', 'image/jpeg': 'jpg', 'image/webp': 'webp' }[file.type];
   const path = 'assets/uploads/' + crypto.randomUUID() + '.' + extension;
@@ -109,6 +119,15 @@ async function upload(file, tree) {
   return path;
 }
 async function save(next, tree) {
+  if (demoMode) {
+    try { localStorage.setItem(demoKey, JSON.stringify({ artists: next })); }
+    catch { throw new Error('Не хватает места в браузере. Уменьшите размер фотографий.'); }
+    artists = next;
+    editor.hidden = true;
+    render();
+    status.textContent = 'Сохранено в этом браузере. Общий сайт не изменён.';
+    return;
+  }
   // A non-forced reference update rejects concurrent edits instead of overwriting them.
   const commit = await api('/git/commits/' + head);
   tree.push({ path: 'public/data/artists.json', mode: '100644', type: 'blob', content: JSON.stringify({ artists: next }, null, 2) + '\n' });
@@ -124,9 +143,13 @@ async function save(next, tree) {
 document.querySelector('#login').addEventListener('submit', event => {
   event.preventDefault();
   task(async () => {
+    if (demoMode) {
+      if (document.querySelector('#password').value !== '6767') throw new Error('Неверный пароль.');
+    } else {
     const response = await fetch('/api/admin/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password: document.querySelector('#password').value }) });
     const result = await response.json();
     if (!response.ok) throw new Error(result.message);
+    }
     await load();
     document.querySelector('#password').value = '';
     document.querySelector('#login').hidden = true;
@@ -138,8 +161,10 @@ document.querySelector('#login').addEventListener('submit', event => {
 document.querySelector('#new').onclick = () => open();
 document.querySelector('#cancel').onclick = () => { editor.hidden = true; };
 document.querySelector('#logout').onclick = () => task(async () => {
+  if (!demoMode) {
   const response = await fetch('/api/admin/logout', { method: 'POST' });
   if (!response.ok && response.status !== 401) throw new Error('Не удалось завершить сеанс. Повторите выход.');
+  }
   artists = [];
   editing = null;
   editor.reset();
