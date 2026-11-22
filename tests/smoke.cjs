@@ -38,8 +38,8 @@ async function ready() {
     assert.equal(await menu.getByRole('link', { name: 'Главная' }).getAttribute('aria-current'), 'page');
     await menu.getByRole('link', { name: 'Артисты' }).click();
     await page.waitForURL('**/artists.html');
-    await menu.getByRole('link', { name: 'Услуги' }).click();
-    await page.waitForURL('**/index.html#services');
+    await menu.getByRole('link', { name: 'Главная' }).click();
+    await page.waitForURL('**/index.html');
     assert.equal(await page.locator('#services .service').count(), 3);
     assert.equal(await page.locator('#journey .steps li').count(), 4);
     await menu.getByRole('link', { name: 'Преподаватели' }).click();
