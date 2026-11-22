@@ -795,3 +795,33 @@ body::before {
 .editor-page-layout #photo-preview { width: 100%; max-width: none; max-height: 480px; object-fit: contain; }
 .admin-actions { position: sticky; bottom: 0; background: #101010; padding: 16px; border-radius: 16px; }
 @media(max-width: 767px) { .artists-grid { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; } .artist-tile h2 { font-size: 18px; padding: 12px 2px 4px; } .editor-page-layout { grid-template-columns: 1fr; } }
+
+/* The active artist stays centered between its immediate neighbours. */
+.artists .artist--active {
+  left: 25%;
+  width: 50%;
+  top: 318px;
+  height: 447px;
+}
+.artists .artist--back {
+  top: 353px;
+  width: 24%;
+  height: 340px;
+}
+.artists .artist--left { left: 0; }
+.artists .artist--right { left: 76%; }
+@media (max-width: 767px) {
+  .artists .artist--active {
+    left: 20%;
+    width: 60%;
+    top: 260px;
+    height: 215px;
+  }
+  .artists .artist--back {
+    top: 285px;
+    width: 22%;
+    height: 160px;
+  }
+  .artists .artist--left { left: 0; }
+  .artists .artist--right { left: 78%; }
+}

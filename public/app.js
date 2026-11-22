@@ -6,7 +6,11 @@ function selectArtist(index) {
   active = (index + cards.length) % cards.length;
   cards.forEach((card, i) => {
     const selected = i === active;
-    card.hidden = cards.length > 2 && !selected && i !== (active + 1) % cards.length;
+    const right = i === (active + 1) % cards.length && !selected;
+    const left = cards.length > 2 && i === (active - 1 + cards.length) % cards.length;
+    card.hidden = !selected && !left && !right;
+    card.classList.toggle('artist--left', left);
+    card.classList.toggle('artist--right', right);
     card.classList.toggle('artist--active', selected);
     card.classList.toggle('artist--back', !selected);
     if (selected) card.setAttribute('aria-current', 'true');
@@ -14,6 +18,7 @@ function selectArtist(index) {
   });
   carouselStatus.textContent = `Карточка ${active + 1} из ${cards.length}`;
 }
+selectArtist(0);
 let suppressClick = false;
 cards.forEach(card => card.addEventListener('click', event => {
   if (suppressClick) event.preventDefault();
