@@ -49,7 +49,12 @@ function render() {
   for (const artist of artists) {
     const button = document.createElement('button');
     button.type = 'button';
-    button.textContent = artist.name;
+    const photo = document.createElement('img');
+    photo.src = artist.photo.startsWith('data:image/') ? artist.photo : '../' + artist.photo;
+    photo.alt = '';
+    const title = document.createElement('span');
+    title.textContent = artist.name;
+    button.append(photo, title);
     button.addEventListener('click', () => open(artist));
     list.append(button);
   }
@@ -85,6 +90,7 @@ function open(artist = null) {
     label.append(check, image);
     gallery.append(label);
   }
+  updatePreview();
   editor.elements.name.focus();
 }
 async function task(action) {
@@ -204,3 +210,51 @@ document.querySelector('#delete').onclick = () => {
   if (!editing || !confirm('Удалить артиста «' + editing.name + '» с сайта?')) return;
   task(() => save(artists.filter(artist => artist.id !== editing.id), []));
 };
+
+
+let previewUrls = [];
+function updatePreview() {
+  previewUrls.forEach(url => URL.revokeObjectURL(url));
+  previewUrls = [];
+  function fileUrl(file) {
+    const url = URL.createObjectURL(file);
+    previewUrls.push(url);
+    return url;
+  }
+  const fields = editor.elements;
+  const source = path => path?.startsWith('data:image/') ? path : '../' + path;
+  for (const [name, selector] of [['photo', '#photo-preview'], ['logo', '#logo-preview']]) {
+    const image = document.querySelector(selector);
+    const path = fields[name].files[0] ? fileUrl(fields[name].files[0]) : editing?.[name];
+    image.hidden = !path || (name === 'logo' && fields.removeLogo.checked);
+    if (path) image.src = path.startsWith('blob:') ? path : source(path);
+  }
+  const gallery = document.querySelector('#new-gallery');
+  gallery.replaceChildren();
+  for (const file of fields.photos.files) {
+    const image = document.createElement('img');
+    image.src = fileUrl(file);
+    image.alt = 'Новая фотография';
+    gallery.append(image);
+  }
+  const video = document.querySelector('#video-preview');
+  video.hidden = true;
+  try { video.href = https(fields.video.value); video.hidden = false; } catch {}
+  const links = document.querySelector('#links-preview');
+  links.replaceChildren();
+  for (const line of fields.links.value.split('\n')) {
+    const index = line.indexOf('|');
+    if (index < 1) continue;
+    try {
+      const link = document.createElement('a');
+      link.href = https(line.slice(index + 1).trim());
+      link.textContent = line.slice(0, index).trim() + ' ↗';
+      link.className = 'platform-link';
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      links.append(link);
+    } catch {}
+  }
+}
+editor.addEventListener('input', updatePreview);
+editor.addEventListener('change', updatePreview);

@@ -9,13 +9,19 @@
 <section id="workspace" hidden><button id="logout" type="button">Выйти</button><div id="artist-list"></div><button id="new" type="button">Добавить артиста</button>
 <form id="editor" hidden>
 <h2 id="editor-title">Новый артист</h2>
-<label>Название<input name="name" required maxlength="160"></label>
-<label>Описание<textarea name="description" rows="5" maxlength="10000"></textarea></label>
-<label>Главное фото<input name="photo" type="file" accept="image/png,image/jpeg,image/webp"></label><img id="photo-preview" class="admin-preview" alt="Главное фото" hidden>
-<label>Логотип вместо названия<input name="logo" type="file" accept="image/png,image/jpeg,image/webp"></label><label><input name="removeLogo" type="checkbox"> Удалить логотип</label>
-<label>Дополнительные фотографии<input name="photos" type="file" accept="image/png,image/jpeg,image/webp" multiple></label><p>Новые фотографии добавляются к существующим.</p><div id="gallery-list"></div>
-<label>Ссылка на видео<input name="video" type="url" placeholder="https://…"></label>
-<label>Платформы для прослушивания<textarea name="links" rows="5" placeholder="Яндекс Музыка | https://music.yandex.ru/…&#10;VK Музыка | https://vk.com/…"></textarea></label><p>По одной ссылке в строке — название платформы, знак | и HTTPS-адрес.</p>
+<div class="editor-page-layout">
+<div class="editor-media">
+<label>Название группы<input name="name" required maxlength="160" placeholder="Название артиста"></label>
+<label>Логотип<input name="logo" type="file" accept="image/png,image/jpeg,image/webp"></label><img id="logo-preview" class="artist-logo" alt="Логотип" hidden>
+<label><input name="removeLogo" type="checkbox"> Удалить логотип</label>
+<label>Фотографии<input name="photos" type="file" accept="image/png,image/jpeg,image/webp" multiple></label><div id="gallery-list"></div><div id="new-gallery" class="artist-gallery"></div>
+<label>Видео<input name="video" type="url" placeholder="https://…"></label><a id="video-preview" class="video-link" target="_blank" rel="noopener noreferrer" hidden>▶ Смотреть видео ↗</a>
+</div>
+<div class="editor-info">
+<label>Главное фото<input name="photo" type="file" accept="image/png,image/jpeg,image/webp"></label><img id="photo-preview" class="artist-main-photo" alt="Главное фото" hidden>
+<label>Описание<textarea name="description" rows="6" maxlength="10000" placeholder="Расскажите об артисте"></textarea></label>
+<label>Ссылки на платформы<textarea name="links" rows="4" placeholder="Яндекс Музыка | https://music.yandex.ru/…"></textarea></label><p>Одна строка — название платформы | HTTPS-ссылка.</p><div id="links-preview" class="platform-links"></div>
+</div></div>
 <div class="admin-actions"><button class="cta" type="submit">Сохранить</button><button id="cancel" type="button">Отмена</button><button id="delete" type="button">Удалить артиста</button></div>
 </form></section>
 </main></body></html>
