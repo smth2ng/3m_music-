@@ -16,7 +16,7 @@ export async function buildSEO() {
   for (const file of files) {
     let html = await readFile('dist/' + file, 'utf8');
     const title = html.match(/<title>(.*?)<\/title>/s)?.[1] ?? '3М music';
-    const hidden = ['admin/index.html','artist.html','artists/artist-1.html','artists/artist-2.html'].includes(file);
+    const hidden = ['admin/index.html','artist.html'].includes(file);
     const profile = artists.find(artist => file === 'artists/' + artist.id + '.html');
     const image = base + (profile?.photo || 'assets/artists-front.webp');
     const url = base + (file === 'index.html' ? '' : file);

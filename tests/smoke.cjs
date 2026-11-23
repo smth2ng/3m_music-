@@ -24,6 +24,14 @@ async function ready() {
     page.on('pageerror', error => errors.push(error.message));
     page.on('response', response => { if (response.status() >= 400) errors.push(`${response.status()}: ${response.url()}`); });
     await page.goto(origin);
+    await page.evaluate(() => {
+      localStorage.setItem('3m-artists-demo', JSON.stringify({ artists: [1, 2].map(index => ({
+        id: 'smoke-artist-' + index, name: 'Тестовый артист ' + index,
+        photo: 'assets/mikhail-grishin.webp', description: '', photos: [], links: []
+      })) }));
+    });
+    await page.reload();
+    await page.waitForFunction(() => document.querySelectorAll('.artist').length === 2);
     await page.locator('img').evaluateAll(images => images.forEach(image => { image.loading = 'eager'; }));
     await page.waitForFunction(() => [...document.images].every(image => image.complete));
     assert.equal(await page.locator('img').evaluateAll(images => images.every(image => image.naturalWidth > 0)), true, `Images load at ${width}`);
@@ -60,7 +68,7 @@ async function ready() {
     const initialScroll = await page.evaluate(() => scrollY);
     await page.mouse.move(frontBox.x + frontBox.width / 2, frontBox.y + frontBox.height / 2);
     await page.mouse.wheel(120, 0);
-    await page.waitForFunction(() => document.querySelector('[data-artist="1"]').getAttribute('aria-current') === 'true');
+    await page.waitForFunction(() => document.querySelectorAll('.artist')[1].getAttribute('aria-current') === 'true');
     assert.equal(await page.evaluate(() => scrollY), initialScroll, 'Wheel over cards keeps page position');
     await page.mouse.wheel(80, 0);
     assert.equal(await cards.nth(1).getAttribute('aria-current'), 'true', 'Wheel momentum does not switch twice');
@@ -76,8 +84,8 @@ async function ready() {
     await cards.nth(0).click();
     const popup = await popupPromise;
     await popup.waitForLoadState();
-    assert.ok(popup.url().endsWith('/artists/artist-1.html'));
-    assert.equal(await popup.locator('h1').innerText(), 'Артист 1');
+    assert.ok(popup.url().endsWith('/artist.html?id=smoke-artist-1'));
+    assert.equal(await popup.locator('h1').innerText(), 'Тестовый артист 1');
     assert.equal(await popup.locator('.artist-main-photo').count(), 1);
     await popup.close();
     assert.equal(await cards.nth(0).getAttribute('aria-current'), 'true', 'Click opens page without changing the artist');
@@ -86,7 +94,7 @@ async function ready() {
       await session.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: 270, y: 350 }] });
       await session.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: 160, y: 352 }] });
       await session.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
-      await page.waitForFunction(() => document.querySelector('[data-artist="1"]').getAttribute('aria-current') === 'true');
+      await page.waitForFunction(() => document.querySelectorAll('.artist')[1].getAttribute('aria-current') === 'true');
       assert.equal(context.pages().length, 1, 'Swipe does not open an artist tab');
       await cards.nth(1).press('ArrowRight');
       await page.evaluate(() => window.scrollTo(0, 130));
@@ -98,8 +106,8 @@ async function ready() {
       await cards.nth(1).click();
       const secondPopup = await secondPopupPromise;
       await secondPopup.waitForLoadState();
-      assert.ok(secondPopup.url().endsWith('/artists/artist-2.html'));
-      assert.equal(await secondPopup.locator('h1').innerText(), 'Артист 2');
+      assert.ok(secondPopup.url().endsWith('/artist.html?id=smoke-artist-2'));
+      assert.equal(await secondPopup.locator('h1').innerText(), 'Тестовый артист 2');
       assert.equal(await secondPopup.locator('.artist-main-photo').count(), 1);
       await secondPopup.close();
       await page.evaluate(() => window.scrollTo(0, 0));
@@ -139,6 +147,14 @@ async function ready() {
     const page = await context.newPage();
     page.on('pageerror', error => errors.push(error.message));
     await page.goto(origin);
+    await page.evaluate(() => {
+      localStorage.setItem('3m-artists-demo', JSON.stringify({ artists: [1, 2].map(index => ({
+        id: 'smoke-artist-' + index, name: 'Тестовый артист ' + index,
+        photo: 'assets/mikhail-grishin.webp', description: '', photos: [], links: []
+      })) }));
+    });
+    await page.reload();
+    await page.waitForFunction(() => document.querySelectorAll('.artist').length === 2);
     await page.waitForFunction(() => document.documentElement.classList.contains('motion-ready'));
     assert.match(await page.locator('html').evaluate(element => getComputedStyle(element).scrollSnapType), /^y(?: proximity)?$/);
     const chapter = page.locator('#services');

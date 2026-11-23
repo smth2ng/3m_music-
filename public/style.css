@@ -893,3 +893,30 @@ h1, h2, h3, .phone, address { overflow-wrap: anywhere; }
   }
   .hero noscript { position: static; }
 }
+
+.hero--empty {
+  height: auto;
+  padding-bottom: 48px;
+}
+.hero--empty .hero-heading {
+  position: relative;
+  top: auto;
+  padding-top: 142px;
+}
+.hero--empty > .cta {
+  position: relative;
+  top: auto;
+  right: auto;
+  margin-top: 28px;
+  margin-left: auto;
+}
+@media (max-width: 767px) {
+  .hero--empty .hero-heading { padding-top: 136px; }
+}
+@media (max-width: 279px) {
+  .hero--empty .hero-heading { padding-top: 0; }
+}
+
+.hero--empty noscript { position: static; }
+
+.hero--empty .artists { display: none; }

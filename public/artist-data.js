@@ -37,6 +37,8 @@ async function refreshArtists() {
         carousel.insertBefore(card, document.querySelector('#carousel-status'));
       }
     }
+    const empty = document.querySelector('#artists-empty');
+    if (empty) empty.hidden = artists.length > 0;
     document.dispatchEvent(new Event('artists-updated'));
   } catch {
     // Keep server-rendered cards available when the published data cannot be loaded.

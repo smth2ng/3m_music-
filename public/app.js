@@ -3,6 +3,13 @@ let cards = [...document.querySelectorAll('.artist')];
 const carouselStatus = document.querySelector('#carousel-status');
 let active = 0;
 function selectArtist(index, animate = true) {
+  carousel.hidden = cards.length === 0;
+  carousel.closest('.hero').classList.toggle('hero--empty', cards.length === 0);
+  if (!cards.length) {
+    active = 0;
+    carouselStatus.textContent = 'Артисты пока не добавлены';
+    return;
+  }
   const focused = document.activeElement;
   const previous = cards.map(card => {
     const bounds = card.getBoundingClientRect();

@@ -28,6 +28,7 @@ export async function setupReleases() {
     const artists = await releaseArtists();
     const select = form.elements.artist;
     select.replaceChildren();
+    if (!artists.length && !release) select.add(new Option('Сначала добавьте артиста', ''));
     for (const artist of artists) select.add(new Option(artist.name, artist.id));
     if (release && !artists.some(artist => artist.id === release.artistId)) {
       select.add(new Option(release.artistName + ' (удалён)', release.artistId));

@@ -24,7 +24,6 @@ export function normalizeCollection(name, records) {
   const seen = new Set();
   return records.flatMap(record => {
     if (!record || typeof record !== 'object' || typeof record.id !== 'string' || !/^[a-z0-9][a-z0-9-]{0,79}$/.test(record.id) || seen.has(record.id)) return [];
-    if (name === 'artists' && ['artist-1', 'artist-2'].includes(record.id)) return [];
     const title = text(name === 'releases' ? record.title : record.name).trim();
     if (!title) return [];
     const photo = safePhoto(record.photo);
