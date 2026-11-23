@@ -171,6 +171,37 @@ async function ready() {
     console.log(`PASS ${width}px: magnetic scrolling, chapter reveal, glass, progress, reduced-motion preference change`);
     await context.close();
   }
+  for (const width of [390, 768, 1024, 1440]) {
+    const context = await browser.newContext({ viewport: { width, height: 900 }, reducedMotion: 'reduce' });
+    const page = await context.newPage();
+    page.on('pageerror', error => errors.push(error.message));
+    await page.addInitScript(testOrigin => {
+      if (location.origin !== testOrigin) return;
+      localStorage.setItem('3m-releases-demo', JSON.stringify({ releases: Array.from({ length: 12 }, (_, index) => ({
+        id: 'smoke-release-' + index, title: 'Релиз ' + (index + 1), artistId: 'smoke-artist', artistName: 'Тестовый артист',
+        photo: 'assets/artists-front.webp', url: 'https://example.com/listen/' + index
+      })) }));
+    }, origin);
+    await page.goto(origin);
+    await page.waitForFunction(() => document.querySelectorAll('.release-card').length === 12);
+    const cards = page.locator('.release-card');
+    await cards.locator('img').evaluateAll(images => images.forEach(image => { image.loading = 'eager'; }));
+    await page.waitForFunction(() => [...document.querySelectorAll('.release-card img')].every(image => image.complete && image.naturalWidth > 0));
+    const covers = await cards.locator('img').evaluateAll(images => images.map(image => {
+      const rect = image.getBoundingClientRect();
+      return { width: rect.width, height: rect.height };
+    }));
+    assert.ok(covers.every(cover => cover.width > 0 && Math.abs(cover.width - cover.height) < 1), `Square release covers at ${width}px`);
+    const positions = await cards.evaluateAll(elements => elements.map(element => element.getBoundingClientRect().top));
+    const columns = width < 768 ? 2 : 4;
+    assert.equal(positions.filter(top => Math.abs(top - positions[0]) < 1).length, columns, 'Release grid retains its column count');
+    assert.ok(positions[columns] > positions[0], 'Additional releases wrap into the next row');
+    assert.equal(await page.locator('#releases-empty').isVisible(), false);
+    assert.equal(await cards.first().getByRole('link', { name: 'Слушать' }).getAttribute('href'), 'https://example.com/listen/0');
+    assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true, `No release grid overflow at ${width}px`);
+    console.log(`PASS ${width}px: 12 releases, square covers, grid wrapping, listening links`);
+    await context.close();
+  }
   assert.deepEqual(errors, [], 'No browser errors or failed HTTP responses');
   console.log('All 7 viewport checks passed.');
 })().catch(error => { console.error(error); process.exitCode = 1; }).finally(async () => { if (browser) await browser.close(); server.kill(); });
