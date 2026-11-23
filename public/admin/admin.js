@@ -254,7 +254,7 @@ function updatePreview() {
     try {
       const link = document.createElement('a');
       link.href = https(line.slice(index + 1).trim());
-      link.textContent = line.slice(0, index).trim() + ' ↗';
+      link.textContent = line.slice(0, index).trim();
       link.className = 'platform-link';
       link.target = '_blank';
       link.rel = 'noopener noreferrer';

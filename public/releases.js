@@ -17,7 +17,7 @@ async function renderReleases() {
       const link = document.createElement('a');
       link.className = 'platform-link';
       link.href = listeningUrl(release.url);
-      link.textContent = 'Слушать ↗';
+      link.textContent = 'Слушать';
       link.target = '_blank';
       link.rel = 'noopener noreferrer';
       card.append(image, artist, title, link);

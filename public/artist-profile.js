@@ -29,7 +29,7 @@
       const parsed = new URL(url);
       if (parsed.protocol !== 'https:') return null;
       const a = document.createElement('a');
-      a.href = parsed.href; a.textContent = label + ' ↗'; a.className = className;
+      a.href = parsed.href; a.textContent = label; a.className = className;
       a.target = '_blank'; a.rel = 'noopener noreferrer';
       return a;
     }
