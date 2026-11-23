@@ -1,3 +1,4 @@
+import { setupReleases } from './releases.js';
 import { setupTeachers } from './teachers.js';
 const demoMode = true;
 const demoKey = '3m-artists-demo';
@@ -159,6 +160,7 @@ document.querySelector('#login').addEventListener('submit', event => {
     }
     await load();
     await setupTeachers();
+    await setupReleases();
     document.querySelector('#password').value = '';
     document.querySelector('#login').hidden = true;
     document.querySelector('#workspace').hidden = false;
@@ -178,6 +180,7 @@ document.querySelector('#logout').onclick = () => task(async () => {
   editor.reset();
   editor.hidden = true;
   document.querySelector('#teacher-editor').hidden = true;
+  document.querySelector('#release-editor').hidden = true;
   document.querySelector('#workspace').hidden = true;
   document.querySelector('#login').hidden = false;
   status.textContent = 'Вы вышли.';

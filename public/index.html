@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="./style.css">
   <script src="./artist-data.js" defer></script>
   <script src="./app.js" defer></script>
+  <script type="module" src="./releases.js"></script>
 </head>
 <body>
 <a class="skip-link" href="#about">Перейти к содержимому</a>
@@ -40,6 +41,11 @@
   <section class="about panel" id="about" tabindex="-1" aria-labelledby="about-title">
     <h2 id="about-title">О центре</h2>
     <p>Помогаем артистам создавать музыку, записывать вокал, выпускать треки, снимать клипы и продвигать проекты.</p>
+  </section>
+  <section class="releases" id="releases" aria-labelledby="releases-title">
+    <h2 id="releases-title">Недавние релизы</h2>
+    <p id="releases-empty">Релизы скоро появятся.</p>
+    <div id="release-list" class="release-grid"></div>
   </section>
     <section class="services" id="services" aria-labelledby="services-title">
       <h2 id="services-title">Услуги</h2>

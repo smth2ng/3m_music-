@@ -37,5 +37,18 @@
 <label>Описание<textarea name="description" rows="5" maxlength="10000"></textarea></label>
 <div class="admin-actions"><button class="cta" type="submit">Сохранить преподавателя</button><button id="teacher-cancel" type="button">Отмена</button><button id="teacher-delete" type="button" hidden>Удалить преподавателя</button></div>
 </form>
-</section></section>
+</section>
+<section class="teacher-admin" aria-labelledby="release-admin-title">
+<h2 id="release-admin-title">Недавние релизы</h2>
+<div id="release-admin-list" class="admin-actions"></div>
+<button id="release-new" type="button">Добавить релиз</button>
+<form id="release-editor" hidden>
+<h3 id="release-editor-title">Новый релиз</h3>
+<label>Название релиза<input name="title" required maxlength="160"></label>
+<label>Артист<select name="artist" required></select></label>
+<label>Обложка<input name="photo" type="file" accept="image/png,image/jpeg,image/webp"></label>
+<img id="release-preview" class="admin-preview" alt="Обложка релиза" hidden>
+<label>Ссылка для кнопки «Слушать»<input name="url" type="url" placeholder="https://…" required></label>
+<div class="admin-actions"><button class="cta" type="submit">Сохранить релиз</button><button id="release-cancel" type="button">Отмена</button></div>
+</form></section></section>
 </main></body></html>
