@@ -1,0 +1,77 @@
+[
+  {
+    "file": "dist/admin/index.html",
+    "asset": "../style.css",
+    "hash": "cb6b34c8c9c0"
+  },
+  {
+    "file": "dist/admin/index.html",
+    "asset": "./admin.js",
+    "hash": "9f8f8a47f55c"
+  },
+  {
+    "file": "dist/artist.html",
+    "asset": "./style.css",
+    "hash": "cb6b34c8c9c0"
+  },
+  {
+    "file": "dist/artist.html",
+    "asset": "./artist-profile.js",
+    "hash": "a41cf58d20b3"
+  },
+  {
+    "file": "dist/artists/artist-1.html",
+    "asset": "../style.css",
+    "hash": "cb6b34c8c9c0"
+  },
+  {
+    "file": "dist/artists/artist-2.html",
+    "asset": "../style.css",
+    "hash": "cb6b34c8c9c0"
+  },
+  {
+    "file": "dist/artists.html",
+    "asset": "./style.css",
+    "hash": "cb6b34c8c9c0"
+  },
+  {
+    "file": "dist/artists.html",
+    "asset": "./artist-data.js",
+    "hash": "568bc129128a"
+  },
+  {
+    "file": "dist/contacts.html",
+    "asset": "./style.css",
+    "hash": "cb6b34c8c9c0"
+  },
+  {
+    "file": "dist/index.html",
+    "asset": "./style.css",
+    "hash": "cb6b34c8c9c0"
+  },
+  {
+    "file": "dist/index.html",
+    "asset": "./artist-data.js",
+    "hash": "568bc129128a"
+  },
+  {
+    "file": "dist/index.html",
+    "asset": "./app.js",
+    "hash": "9c0ffb07ff54"
+  },
+  {
+    "file": "dist/index.html",
+    "asset": "./releases.js",
+    "hash": "42144e29e2c5"
+  },
+  {
+    "file": "dist/teachers.html",
+    "asset": "./style.css",
+    "hash": "cb6b34c8c9c0"
+  },
+  {
+    "file": "dist/teachers.html",
+    "asset": "./teachers.js",
+    "hash": "47a329668bed"
+  }
+]

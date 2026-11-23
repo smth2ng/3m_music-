@@ -1,0 +1,34 @@
+{
+  "heading320": {
+    "text": "Преподаватели",
+    "scroll": 263,
+    "client": 246,
+    "rect": {
+      "x": 37,
+      "y": 180,
+      "width": 246,
+      "height": 39.09375,
+      "top": 180,
+      "right": 283,
+      "bottom": 219.09375,
+      "left": 37
+    },
+    "overflow": "visible"
+  },
+  "occlusion": {
+    "rect": {
+      "x": 24,
+      "y": 409.375,
+      "width": 342,
+      "height": 44,
+      "top": 409.375,
+      "right": 366,
+      "bottom": 453.375,
+      "left": 24
+    },
+    "topTag": "INPUT",
+    "topText": "",
+    "fieldOnTop": true,
+    "scrollY": 657
+  }
+}

@@ -1,0 +1,5 @@
+
+> 3m-music@1.0.0 build
+> node scripts/build.mjs
+
+Static website built in dist/

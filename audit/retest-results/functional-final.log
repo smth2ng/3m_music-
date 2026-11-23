@@ -1,0 +1,75 @@
+{
+  "matrix": 264,
+  "checks": [
+    {
+      "name": "Internal links and static files under GitHub Pages subpath",
+      "status": "passed"
+    },
+    {
+      "name": "Navigation, modal buttons, Escape, focus trap and restoration",
+      "status": "passed"
+    },
+    {
+      "name": "Carousel wheel, keyboard, 3 visible artists, momentum, focus and touch swipe",
+      "status": "passed"
+    },
+    {
+      "name": "Carousel focus survives hiding an old card",
+      "status": "passed"
+    },
+    {
+      "name": "200% browser zoom approximation via half CSS viewport, all pages",
+      "status": "passed"
+    },
+    {
+      "name": "JavaScript disabled baseline and phone access",
+      "status": "passed"
+    },
+    {
+      "name": "Populated content screenshots, 12 releases and 3 additional artists",
+      "status": "passed"
+    },
+    {
+      "name": "Admin artist, teacher and release CRUD, URL validation, logout",
+      "status": "passed"
+    },
+    {
+      "name": "Malformed localStorage handling",
+      "status": "passed"
+    },
+    {
+      "name": "Removing local override restores baseline",
+      "status": "passed"
+    },
+    {
+      "name": "Missing artist must have accessible heading and usable return link",
+      "status": "passed"
+    },
+    {
+      "name": "Reduced-motion toggle removes animated enhancement",
+      "status": "passed"
+    },
+    {
+      "name": "Keyboard focus indicators and 200% text zoom overflow probe",
+      "status": "passed"
+    }
+  ],
+  "axe": 34,
+  "browsers": [
+    {
+      "name": "chromium",
+      "status": "available",
+      "version": "156.0.8078.79"
+    },
+    {
+      "name": "firefox",
+      "status": "unavailable",
+      "reason": "browserType.launch: Executable doesn't exist at /tmp/3m-audit-browsers/firefox-1572/firefox/firefox"
+    },
+    {
+      "name": "webkit",
+      "status": "unavailable",
+      "reason": "browserType.launch: Executable doesn't exist at /tmp/3m-audit-browsers/webkit-2388/pw_run.sh"
+    }
+  ]
+}

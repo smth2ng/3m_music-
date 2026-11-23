@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /3m_music-/admin/
+Disallow: /3m_music-/artist.html
+Sitemap: https://smth2ng.github.io/3m_music-/sitemap.xml

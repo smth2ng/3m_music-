@@ -1,0 +1,20 @@
+{
+  "scope": "Local Node server only, dummy credential, no GitHub write or external API request",
+  "unauthenticated": 401,
+  "badOrigin": 403,
+  "wrongPassword": 401,
+  "correctPassword": 200,
+  "cookie": {
+    "httpOnly": true,
+    "sameSiteStrict": true,
+    "pathScoped": true,
+    "secure": false,
+    "localHttp": true
+  },
+  "unapprovedRoute": 404,
+  "logout": 200,
+  "expiredCookie": 401,
+  "malformedJson": 502,
+  "traversalStatus": 404,
+  "sourceExposed": false
+}

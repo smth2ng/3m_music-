@@ -1,12 +1,18 @@
 <!doctype html>
 <html lang="ru">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Артисты — управление</title><link rel="stylesheet" href="../style.css"><script src="./admin.js" type="module"></script></head>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>3М music — управление сайтом</title><link rel="icon" href="../assets/logo.svg" type="image/svg+xml"><link rel="stylesheet" href="../style.css"><script src="./admin.js" type="module"></script></head>
 <body><main class="admin-page">
 <a class="text-link" href="../index.html">На сайт</a><h1>Управление сайтом</h1>
-<p>Деморежим. Изменения сохраняются только в этом браузере. Пароль проверяется в коде страницы.</p>
+<p id="admin-mode">Деморежим. Изменения сохраняются только в этом браузере. Пароль проверяется в коде страницы.</p>
 <form id="login"><label>Пароль<input id="password" type="password" required autocomplete="current-password"></label><button class="cta">Войти</button></form>
+<p id="storage-warning" role="alert"></p>
 <p id="status" role="status" aria-live="polite"></p>
-<section id="workspace" hidden><button id="logout" type="button">Выйти</button><h2>Артисты</h2><div id="artist-list"></div><button id="new" type="button">Добавить артиста</button>
+<section id="workspace" hidden><div class="admin-toolbar"><button id="logout" type="button">Выйти</button><button id="reload-data" type="button">Обновить данные</button><button id="backup-data" type="button">Скачать резервную копию</button></div>
+<details class="backup-panel"><summary>Восстановить данные из резервной копии</summary>
+<label>Раздел<select id="restore-collection"><option value="artists">Артисты</option><option value="teachers">Преподаватели</option><option value="releases">Релизы</option></select></label>
+<label>Файл резервной копии<input id="restore-file" type="file" accept="application/json,.json"></label>
+<button id="restore-data" type="button">Восстановить выбранный раздел</button>
+</details><h2>Артисты</h2><div id="artist-list"></div><button id="new" type="button">Добавить артиста</button>
 <form id="editor" hidden>
 <h2 id="editor-title">Новый артист</h2>
 <div class="editor-page-layout">

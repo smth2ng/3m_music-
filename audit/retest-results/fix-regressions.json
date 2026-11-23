@@ -1,0 +1,60 @@
+{
+  "checks": [
+    {
+      "name": "Local two-tab conflict preserves first teacher edit",
+      "status": "passed"
+    },
+    {
+      "name": "Photo/video previews obey hidden and action bar is in normal flow",
+      "status": "passed"
+    },
+    {
+      "name": "Malformed JSON falls back with visible admin warning; null entries are skipped",
+      "status": "passed"
+    },
+    {
+      "name": "Backup export and collection restore preserve Unicode and validate before writing",
+      "status": "passed"
+    },
+    {
+      "name": "Static metadata, robots, sitemap and visible placeholders",
+      "status": "passed"
+    },
+    {
+      "name": "Responsive images load smaller source on mobile",
+      "status": "passed",
+      "details": [
+        {
+          "src": "http://127.0.0.1:4386/3m_music-/assets/responsive/artists-front-256.webp",
+          "width": 233
+        },
+        {
+          "src": "http://127.0.0.1:4386/3m_music-/assets/responsive/artists-back-256.webp",
+          "width": 233
+        }
+      ]
+    },
+    {
+      "name": "200 percent narrow viewport has no header, title or carousel overlaps",
+      "status": "passed"
+    },
+    {
+      "name": "Server login, logout, invalid JSON, oversized body and route validation",
+      "status": "passed"
+    },
+    {
+      "name": "Server-backed publishing for artists, teachers and releases with mock GitHub and conflict protection",
+      "status": "passed",
+      "details": {
+        "photoBlobs": 2,
+        "collections": [
+          "artists",
+          "teachers",
+          "releases"
+        ],
+        "commits": 3
+      }
+    }
+  ],
+  "realGitHubWrites": false
+}

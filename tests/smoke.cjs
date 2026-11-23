@@ -77,7 +77,8 @@ async function ready() {
     const popup = await popupPromise;
     await popup.waitForLoadState();
     assert.ok(popup.url().endsWith('/artists/artist-1.html'));
-    assert.equal(await popup.locator('body').innerText(), '', 'Artist page is intentionally empty');
+    assert.equal(await popup.locator('h1').innerText(), 'Артист 1');
+    assert.equal(await popup.locator('.artist-main-photo').count(), 1);
     await popup.close();
     assert.equal(await cards.nth(0).getAttribute('aria-current'), 'true', 'Click opens page without changing the artist');
     if (width === 390) {
@@ -98,7 +99,8 @@ async function ready() {
       const secondPopup = await secondPopupPromise;
       await secondPopup.waitForLoadState();
       assert.ok(secondPopup.url().endsWith('/artists/artist-2.html'));
-      assert.equal(await secondPopup.locator('body').innerText(), '');
+      assert.equal(await secondPopup.locator('h1').innerText(), 'Артист 2');
+      assert.equal(await secondPopup.locator('.artist-main-photo').count(), 1);
       await secondPopup.close();
       await page.evaluate(() => window.scrollTo(0, 0));
       await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
@@ -115,6 +117,20 @@ async function ready() {
     assert.ok(positions['.services-grid'] > positions['.about']);
     assert.ok(positions['.map'] > positions['.services-grid']);
     assert.equal(await page.locator('html').evaluate(element => getComputedStyle(element).scrollSnapType), 'none', 'Reduced motion disables magnetic scrolling');
+    await page.evaluate(() => {
+      const carousel = document.querySelector('.artists');
+      const source = carousel.querySelector('.artist');
+      for (let index = 2; index < 5; index++) {
+        const card = source.cloneNode(true);
+        card.dataset.artist = String(index);
+        carousel.insertBefore(card, document.querySelector('#carousel-status'));
+      }
+      document.dispatchEvent(new Event('artists-updated'));
+    });
+    await cards.first().focus();
+    for (let index = 0; index < 3; index++) await page.keyboard.press('ArrowRight');
+    assert.equal(await cards.nth(3).getAttribute('aria-current'), 'true', 'Keyboard keeps switching after the previously focused card is hidden');
+    assert.equal(await page.evaluate(() => document.activeElement.matches('.artist') && !document.activeElement.hidden), true, 'Focus remains on a visible carousel card');
     console.log(`PASS ${width}px: layout, assets, menu, wheel/keyboard carousel, artist tab, overlay, contact dialog${width === 390 ? ', touch swipe, page scroll' : ''}`);
     await context.close();
   }

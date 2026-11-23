@@ -1,0 +1,47 @@
+[
+  {
+    "file": "index.html",
+    "focus": {
+      "tag": "A",
+      "text": "Перейти к содержимому",
+      "outline": "rgb(245, 240, 232) solid 2px"
+    },
+    "overflow": false
+  },
+  {
+    "file": "artists.html",
+    "focus": {
+      "tag": "A",
+      "text": "Перейти к содержимому",
+      "outline": "rgb(245, 240, 232) solid 2px"
+    },
+    "overflow": false
+  },
+  {
+    "file": "teachers.html",
+    "focus": {
+      "tag": "A",
+      "text": "Перейти к содержимому",
+      "outline": "rgb(245, 240, 232) solid 2px"
+    },
+    "overflow": false
+  },
+  {
+    "file": "contacts.html",
+    "focus": {
+      "tag": "A",
+      "text": "Перейти к содержимому",
+      "outline": "rgb(245, 240, 232) solid 2px"
+    },
+    "overflow": false
+  },
+  {
+    "file": "admin/",
+    "focus": {
+      "tag": "A",
+      "text": "На сайт",
+      "outline": "rgb(245, 240, 232) solid 2px"
+    },
+    "overflow": false
+  }
+]

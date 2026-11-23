@@ -1,0 +1,10 @@
+{
+  "date": "2026-11-23",
+  "production_url": "https://smth2ng.github.io/3m_music-/",
+  "production_observation": "curl exited 56, CONNECT tunnel failed, response 403. HTTP origin response unavailable.",
+  "meaning": "Execution environment network restriction. This does not establish that the public site is down.",
+  "yandex": "External maps could not be validated in this environment; deterministic local runs abort map requests explicitly.",
+  "firefox": "Install attempted. cdn.playwright.dev and playwright.download.prss.microsoft.com returned 403 Domain forbidden.",
+  "webkit": "Install attempted separately. See webkit-install.log.",
+  "not_tested": ["Production GitHub Pages deployment identity", "Production CDN cache headers and TLS response", "Yandex map accuracy and interactivity", "External listening/video destinations", "Real phone calls and submitted applications"]
+}

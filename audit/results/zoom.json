@@ -1,0 +1,153 @@
+[
+  {
+    "physicalWidth": 390,
+    "cssWidth": 195,
+    "page": "index.html",
+    "overflow": true,
+    "offscreen": [
+      {
+        "tag": "BUTTON",
+        "class": "cta",
+        "rect": {
+          "x": -77,
+          "y": 475,
+          "w": 254,
+          "h": 59
+        }
+      }
+    ]
+  },
+  {
+    "physicalWidth": 390,
+    "cssWidth": 195,
+    "page": "artists.html",
+    "overflow": false,
+    "offscreen": []
+  },
+  {
+    "physicalWidth": 390,
+    "cssWidth": 195,
+    "page": "teachers.html",
+    "overflow": true,
+    "offscreen": []
+  },
+  {
+    "physicalWidth": 390,
+    "cssWidth": 195,
+    "page": "contacts.html",
+    "overflow": false,
+    "offscreen": []
+  },
+  {
+    "physicalWidth": 390,
+    "cssWidth": 195,
+    "page": "admin/",
+    "overflow": true,
+    "offscreen": []
+  },
+  {
+    "physicalWidth": 768,
+    "cssWidth": 384,
+    "page": "index.html",
+    "overflow": false,
+    "offscreen": []
+  },
+  {
+    "physicalWidth": 768,
+    "cssWidth": 384,
+    "page": "artists.html",
+    "overflow": false,
+    "offscreen": []
+  },
+  {
+    "physicalWidth": 768,
+    "cssWidth": 384,
+    "page": "teachers.html",
+    "overflow": false,
+    "offscreen": []
+  },
+  {
+    "physicalWidth": 768,
+    "cssWidth": 384,
+    "page": "contacts.html",
+    "overflow": false,
+    "offscreen": []
+  },
+  {
+    "physicalWidth": 768,
+    "cssWidth": 384,
+    "page": "admin/",
+    "overflow": false,
+    "offscreen": []
+  },
+  {
+    "physicalWidth": 1024,
+    "cssWidth": 512,
+    "page": "index.html",
+    "overflow": false,
+    "offscreen": []
+  },
+  {
+    "physicalWidth": 1024,
+    "cssWidth": 512,
+    "page": "artists.html",
+    "overflow": false,
+    "offscreen": []
+  },
+  {
+    "physicalWidth": 1024,
+    "cssWidth": 512,
+    "page": "teachers.html",
+    "overflow": false,
+    "offscreen": []
+  },
+  {
+    "physicalWidth": 1024,
+    "cssWidth": 512,
+    "page": "contacts.html",
+    "overflow": false,
+    "offscreen": []
+  },
+  {
+    "physicalWidth": 1024,
+    "cssWidth": 512,
+    "page": "admin/",
+    "overflow": false,
+    "offscreen": []
+  },
+  {
+    "physicalWidth": 1440,
+    "cssWidth": 720,
+    "page": "index.html",
+    "overflow": false,
+    "offscreen": []
+  },
+  {
+    "physicalWidth": 1440,
+    "cssWidth": 720,
+    "page": "artists.html",
+    "overflow": false,
+    "offscreen": []
+  },
+  {
+    "physicalWidth": 1440,
+    "cssWidth": 720,
+    "page": "teachers.html",
+    "overflow": false,
+    "offscreen": []
+  },
+  {
+    "physicalWidth": 1440,
+    "cssWidth": 720,
+    "page": "contacts.html",
+    "overflow": false,
+    "offscreen": []
+  },
+  {
+    "physicalWidth": 1440,
+    "cssWidth": 720,
+    "page": "admin/",
+    "overflow": false,
+    "offscreen": []
+  }
+]

@@ -1,8 +1,9 @@
+import { safePhoto } from '../public/content-store.js';
 import { readFile, writeFile } from 'node:fs/promises';
 
 const escape = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
 function imagePath(value) {
-  if (!/^assets\/uploads\/[a-zA-Z0-9._-]+\.(png|jpe?g|webp)$/i.test(value ?? '')) throw new Error('Invalid artist image path');
+  if (!safePhoto(value) || value.startsWith('data:')) throw new Error('Invalid artist image path');
   return value;
 }
 function httpsUrl(value) {
@@ -26,14 +27,14 @@ export async function buildArtists() {
     const links = (artist.links ?? []).map(link => `<a class="platform-link" href="${escape(httpsUrl(link.url))}" target="_blank" rel="noopener noreferrer"><span>${escape(link.label)}</span></a>`).join('');
     const video = artist.video ? `<a class="video-link panel" href="${escape(httpsUrl(artist.video))}" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">▶</span> Смотреть видео </a>` : '';
     const title = artist.logo ? `<h1 class="sr-only">${escape(artist.name)}</h1><img class="artist-logo" src="../${escape(imagePath(artist.logo))}" alt="${escape(artist.name)}">` : `<h1>${escape(artist.name)}</h1>`;
-    await writeFile(`dist/artists/${artist.id}.html`, `<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${escape(artist.name)} — 3М music</title><meta name="description" content="${escape(artist.description)}"><link rel="icon" href="../assets/logo.svg"><link rel="stylesheet" href="../style.css"></head><body><div class="site-shell">${header}<main class="artist-profile"><div class="artist-media">${title}<div class="artist-gallery">${gallery}</div>${video}</div><div class="artist-info"><img class="artist-main-photo" src="../${escape(photo)}" alt="${escape(artist.name)}"><p class="artist-description">${escape(artist.description)}</p><nav class="platform-links" aria-label="Слушать ${escape(artist.name)}">${links}</nav></div></main>${footer}</div></body></html>`);
+    await writeFile(`dist/artists/${artist.id}.html`, `<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${escape(artist.name)} — 3М music</title><meta name="description" content="${escape(artist.description)}"><link rel="icon" href="../assets/logo.svg"><link rel="stylesheet" href="../style.css"></head><body><div class="site-shell"><a class="skip-link" href="#main-content">Перейти к содержимому</a>${header}<main class="artist-profile" id="main-content" tabindex="-1"><div class="artist-media">${title}<div class="artist-gallery">${gallery}</div>${video}</div><div class="artist-info"><img class="artist-main-photo" width="640" height="640" src="../${escape(photo)}" alt="${escape(artist.name)}"><p class="artist-description">${escape(artist.description)}</p><nav class="platform-links" aria-label="Слушать ${escape(artist.name)}">${links}</nav></div></main>${footer}</div></body></html>`);
     cards += `<a href="./artists/${artist.id}.html" target="_blank" rel="noopener noreferrer" class="artist" data-managed-artist="${escape(artist.id)}" hidden data-artist="${seen.size - 1}" aria-label="Открыть страницу ${escape(artist.name)}"><img src="./${escape(photo)}" alt="${escape(artist.name)}" loading="lazy" draggable="false"><span class="artist-overlay"></span></a>`;
   }
   for (const file of ['index.html', 'artists.html']) {
     const path = `dist/${file}`;
     let html = await readFile(path, 'utf8');
     if (file === 'artists.html') {
-      const tiles = artists.map(artist => `<a class="artist-tile panel" data-managed-artist="${escape(artist.id)}" href="./artists/${artist.id}.html"><img src="./${escape(artist.photo)}" alt="${escape(artist.name)}" loading="lazy"><h2>${escape(artist.name)}</h2></a>`).join('');
+      const tiles = artists.map(artist => `<a class="artist-tile panel" data-managed-artist="${escape(artist.id)}" href="./artists/${artist.id}.html"><img src="./${escape(artist.photo)}" alt="" width="640" height="640" loading="lazy"><h2>${escape(artist.name)}</h2></a>`).join('');
       html = html.replace('<!-- managed-artists -->', tiles);
     }
     html = html.replace('<span class="sr-only" id="carousel-status"', cards + '<span class="sr-only" id="carousel-status"');

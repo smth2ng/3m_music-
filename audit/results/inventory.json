@@ -1,0 +1,137 @@
+[
+  {
+    "path": "public/admin/admin.js",
+    "bytes": 12769,
+    "sha256": "cfffe1c5527fdbc83b355174a77076cf1187135cdeb63e20781115e78288c338"
+  },
+  {
+    "path": "public/admin/index.html",
+    "bytes": 5097,
+    "sha256": "ac99ed33bd63c49a1b2c59bc9e6651bcba52a88e11ceb572b20b09f04a17e532"
+  },
+  {
+    "path": "public/admin/releases.js",
+    "bytes": 5297,
+    "sha256": "76718df1d10a8082838676561731086c52e1f1261c5ed7f84eef47dc0e983974"
+  },
+  {
+    "path": "public/admin/teachers.js",
+    "bytes": 4927,
+    "sha256": "bdba6bf058e23f05f42d3341f8c7e9335d8a56aa99d077cb05c5f601514590c0"
+  },
+  {
+    "path": "public/app.js",
+    "bytes": 7378,
+    "sha256": "f625feef178f0be878e093b84df8b0bc931623a4f09e21a540948c4cd45119fa"
+  },
+  {
+    "path": "public/artist-data.js",
+    "bytes": 2343,
+    "sha256": "cb9efbdbd626ecf781b7dbb2651be7825adf98df0c0b5cc107ad15507dd15b75"
+  },
+  {
+    "path": "public/artist-profile.js",
+    "bytes": 2562,
+    "sha256": "748657a6249c1c1b0da5d072ba6182d000289b8df7cba9154d625292210abd2c"
+  },
+  {
+    "path": "public/artist.html",
+    "bytes": 1532,
+    "sha256": "7aaee2b54618c32fc7d481e9a9864934f43f8c5a6ff6c26b90099d4795b2e671"
+  },
+  {
+    "path": "public/artists/artist-1.html",
+    "bytes": 279,
+    "sha256": "687c6c82562939b23cf5c8f4e7e6f42c46911be56ac2d142228a14c11a882fd0"
+  },
+  {
+    "path": "public/artists/artist-2.html",
+    "bytes": 279,
+    "sha256": "d802cc73c087ae8f901ddb0de87ebdbf8ce4f32be29c2f893c644c39136098b7"
+  },
+  {
+    "path": "public/artists.html",
+    "bytes": 1933,
+    "sha256": "625d0200b694dd0ea884d7cd7bc5909a4a3f0bafdddea524b5f77c4c0ec299e7"
+  },
+  {
+    "path": "public/assets/artists-back.webp",
+    "bytes": 271382,
+    "sha256": "412b5fa4319579661942d64164fac83ff4e8e9f3947ad4c01fb54748069c33e1"
+  },
+  {
+    "path": "public/assets/artists-front.webp",
+    "bytes": 216834,
+    "sha256": "67144737b2ba0aac9bd2da59d56b60e30eb611d7851360a5ed3c095e9d65e362"
+  },
+  {
+    "path": "public/assets/footer-logo.svg",
+    "bytes": 4665,
+    "sha256": "6d85c5db16d0bf52b856bd2754c3979503f14c8f9f6e9e1d3bffe4a65a3d9d9d"
+  },
+  {
+    "path": "public/assets/logo.svg",
+    "bytes": 4649,
+    "sha256": "b03b0f9aec78556e1c49669ff19c0d929601db4bf9acc28153563bae2b06ccd2"
+  },
+  {
+    "path": "public/assets/mikhail-grishin.webp",
+    "bytes": 23422,
+    "sha256": "99ee37f9636080c301931bb8010d9b77744e806bf4745707ef9e51bfb00279ac"
+  },
+  {
+    "path": "public/contacts.html",
+    "bytes": 2558,
+    "sha256": "bd170a0e2080086d68ca8d5fa084f60e10e30368ad0169f541ee6e4fffb27fef"
+  },
+  {
+    "path": "public/data/artists.json",
+    "bytes": 15,
+    "sha256": "2b7732ed64294f8ee18cdf36003ba547eac5b633ae563291bcc9a86908a3e844"
+  },
+  {
+    "path": "public/data/releases.json",
+    "bytes": 16,
+    "sha256": "cd27a311547cb133fd80fc525818d4495f01a03f2a52c99c203034f0d6429baa"
+  },
+  {
+    "path": "public/data/teachers.json",
+    "bytes": 251,
+    "sha256": "c68b29c178bf3a4edb9daa3fd74d427ac3d58210726e6044043715cd338a51d4"
+  },
+  {
+    "path": "public/index.html",
+    "bytes": 7354,
+    "sha256": "79ece4230468b5f8aed9d6a4139082ba08d6370456dc9f3701f56c2ccf124415"
+  },
+  {
+    "path": "public/release-data.js",
+    "bytes": 1104,
+    "sha256": "95e756b21ce4c6622dec66dd256b0741425158f7f6082ad71c2199222fa6bce8"
+  },
+  {
+    "path": "public/releases.js",
+    "bytes": 1810,
+    "sha256": "ed8914132b24128db85171622c3f9e7263813d2987006218788b6e9f6ec83a08"
+  },
+  {
+    "path": "public/style.css",
+    "bytes": 19075,
+    "sha256": "31308328e1acf7487291f67cdd22f5fe48e4e7486e3c8da26835df34c326422b"
+  },
+  {
+    "path": "public/teacher-data.js",
+    "bytes": 701,
+    "sha256": "b20b591a0c01ce6176a6241efcc67bb22d28d450dde1edbb1aefe59c578f10e1"
+  },
+  {
+    "path": "public/teachers.html",
+    "bytes": 1995,
+    "sha256": "5223ca9cedfffe0dbd5f3fbb90b517c272bfbe50148035fe8c67c189709e7b68"
+  },
+  {
+    "path": "public/teachers.js",
+    "bytes": 1517,
+    "sha256": "6700c0dda00891641c16f2d7d857fdb99c722b4c8f468d88e05d050386aa7dd3"
+  }
+]

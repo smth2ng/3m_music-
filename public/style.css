@@ -73,7 +73,6 @@ p {
   border:0;
   padding:0;
   background:transparent;
-  transition:left .55s ease,top .55s ease,width .55s ease,height .55s ease;
   display:block;
   overflow:hidden;
   isolation:isolate;
@@ -94,18 +93,10 @@ p {
   transition:opacity .55s;
 }
 .artist--active {
-  left:26.6154%;
-  top:318px;
-  width:46.7692%;
-  height:447px;
   z-index:2;
   clip-path:inset(4px 0 3px);
 }
 .artist--back {
-  left:68.3846%;
-  top:323px;
-  width:21.3846%;
-  height:378px;
   z-index:1;
   clip-path:inset(15px 0);
 }
@@ -266,14 +257,6 @@ p {
   .page {
     padding:0 40px;
   }
-  .artist--active {
-    left:10%;
-    width:60%;
-  }
-  .artist--back {
-    left:68%;
-    width:27%;
-  }
 }
 @media(max-width:767px) {
   html {
@@ -286,17 +269,9 @@ p {
     height:610px;
   }
   .artist--active {
-    left:0;
-    top:276.08px;
-    width:82.44%;
-    height:214.56px;
     clip-path:inset(1.92px 0 1.44px);
   }
   .artist--back {
-    left:54.155%;
-    top:249.15px;
-    width:30.627%;
-    height:147.42px;
     clip-path:inset(5.85px 0);
   }
   .hero>.cta {
@@ -432,9 +407,9 @@ body::before {
     scroll-margin-top: 0;
   }
   .motion-ready .motion-section {
-    opacity: .12;
+    opacity: 1;
     transform: translate3d(0, 60px, 0) scale(.975);
-    filter: blur(5px);
+    filter: none;
     transition: opacity .85s ease, transform 1.1s cubic-bezier(.16, 1, .3, 1), filter .85s ease;
   }
   .motion-ready .motion-section.is-visible,
@@ -445,7 +420,7 @@ body::before {
     filter: none;
   }
   .motion-ready .motion-section .service {
-    opacity: .15;
+    opacity: 1;
     transform: translateY(28px);
     transition: opacity .7s ease, transform .9s cubic-bezier(.16, 1, .3, 1);
     transition-delay: calc(var(--reveal-order, 0) * 90ms);
@@ -494,15 +469,13 @@ body::before {
   width: clamp(48px, 5.2vw, 72px);
   height: auto;
 }
-.site-nav,
-.section-links {
+.site-nav {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   gap: 8px;
 }
-.site-nav a,
-.section-links a {
+.site-nav a {
   display: inline-flex;
   align-items: center;
   min-height: 44px;
@@ -512,8 +485,7 @@ body::before {
   font-weight: 700;
 }
 .site-nav a[aria-current="page"],
-.site-nav a:hover,
-.section-links a:hover {
+.site-nav a:hover {
   color: var(--accent);
   background: #ff7a0014;
 }
@@ -523,8 +495,7 @@ body::before {
   left: 0;
   z-index: 3;
 }
-.hero-heading h1,
-.studio-intro h1 {
+.hero-heading h1 {
   margin-top: 12px;
   font-size: clamp(42px, 4.4vw, 68px);
   line-height: 1.05;
@@ -536,19 +507,6 @@ body::before {
 .studio-page,
 .footer {
   margin-inline: var(--gutter);
-}
-.studio-intro {
-  padding-block: clamp(56px, 9vw, 120px) 32px;
-  border-bottom: 1px solid var(--glass-edge);
-}
-.studio-intro h1 {
-  margin-top: 0;
-}
-.studio-intro p {
-  margin-block: 18px 24px;
-}
-.section-links a {
-  border: 1px solid var(--glass-edge);
 }
 .about {
   padding: clamp(24px, 5vw, 60px);
@@ -690,9 +648,6 @@ body::before {
   .hero-heading h1 {
     font-size: clamp(24px, 7vw, 42px);
   }
-  .studio-intro h1 {
-    font-size: 42px;
-  }
   .services-grid,
   .teacher-list,
   .contacts {
@@ -734,7 +689,7 @@ body::before {
 .platform-link, .video-link { display: flex; justify-content: space-between; align-items: center; gap: 24px; padding: 16px 20px; border: 1px solid var(--glass-edge); border-radius: 14px; background: #191919; }
 .platform-link:hover, .video-link:hover { color: var(--accent); border-color: var(--accent); }
 .video-link { margin-top: 24px; min-height: 100px; }
-.admin-page { max-width: 900px; margin: auto; padding: 24px; }
+.admin-page { max-width: 1440px; margin: auto; padding: 24px; }
 .admin-page h1, .admin-page h2 { margin-block: 24px; }
 .admin-page label { display: block; margin-block: 20px; }
 .admin-page input:not([type=checkbox]), .admin-page textarea { display: block; width: 100%; margin-top: 8px; padding: 12px; background: #171717; color: var(--text); border: 1px solid #666; border-radius: 8px; font: inherit; }
@@ -787,13 +742,12 @@ body::before {
 @media (max-width: 1199px) {
   .artists-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
-.admin-page { max-width: 1440px; }
 .editor-page-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
 .editor-page-layout > div { min-width: 0; }
 #artist-list button { display: grid; gap: 12px; width: 180px; text-align: left; }
 #artist-list img { width: 100%; height: 120px; object-fit: contain; }
 .editor-page-layout #photo-preview { width: 100%; max-width: none; max-height: 480px; object-fit: contain; }
-.admin-actions { position: sticky; bottom: 0; background: #101010; padding: 16px; border-radius: 16px; }
+.admin-actions { position: static; background: #101010; padding: 16px; border-radius: 16px; }
 @media(max-width: 767px) { .artists-grid { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; } .artist-tile h2 { font-size: 18px; padding: 12px 2px 4px; } .editor-page-layout { grid-template-columns: 1fr; } }
 
 /* The active artist stays centered between its immediate neighbours. */
@@ -883,3 +837,59 @@ body::before {
 .release-card h3 { margin-block: 4px 16px; font-size: 24px; overflow-wrap: anywhere; }
 .admin-page select { display: block; width: 100%; padding: 12px; margin-top: 8px; background: #171717; color: var(--text); font: inherit; border: 1px solid #666; border-radius: 8px; }
 @media (max-width: 767px) { .release-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; } .release-card { padding: 12px; } .release-card h3 { font-size: 20px; } }
+
+[hidden] { display: none !important; }
+input, textarea, select { min-width: 0; max-width: 100%; }
+h1, h2, h3, .phone, address { overflow-wrap: anywhere; }
+.admin-page { min-width: 0; }
+.admin-toolbar { display: flex; flex-wrap: wrap; gap: 12px; }
+.admin-actions button { max-width: 100%; }
+.teacher-copy h2, .teacher > h2 { font-size: clamp(19px, 2.2vw, 30px); line-height: 1.2; }
+.artist-main-photo, .artist-gallery img { aspect-ratio: 1; object-fit: contain; }
+.teacher-list img { aspect-ratio: 1; object-fit: contain; }
+@media (max-width: 767px) {
+  .hero > .cta { max-width: 100%; }
+  .teacher-list .teacher { flex-wrap: wrap; }
+}
+.site-nav { min-width: 0; }
+.site-nav a { max-width: 100%; overflow-wrap: anywhere; }
+@media (max-width: 359px) {
+  .site-header { flex-wrap: wrap; }
+  .admin-page { padding: 16px; }
+}
+
+.hero noscript { position: absolute; top: 870px; left: 0; z-index: 3; }
+@media (max-width: 767px) { .hero noscript { top: 550px; } }
+.backup-panel { margin-block: 24px; padding: 16px; border: 1px solid var(--glass-edge); border-radius: 14px; }
+.backup-panel summary { cursor: pointer; min-height: 32px; }
+@media (max-width: 279px) {
+  .site-shell--home .site-header {
+    position: relative;
+    inset: auto;
+  }
+  .hero {
+    height: auto;
+    padding-top: 24px;
+  }
+  .hero-heading {
+    position: relative;
+    top: auto;
+    left: auto;
+  }
+  .artists {
+    position: relative;
+    inset: auto;
+    height: 250px;
+    margin-block: 24px;
+  }
+  .artists .artist--active { top: 20px; height: 210px; }
+  .artists .artist--back { top: 45px; }
+  .hero > .cta {
+    position: relative;
+    top: auto;
+    right: auto;
+    width: 100%;
+    margin-bottom: 40px;
+  }
+  .hero noscript { position: static; }
+}

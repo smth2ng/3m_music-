@@ -1,0 +1,5 @@
+TypeError: Cannot read properties of undefined (reading 'reduce')
+    at /workspace/3m_music-/audit/performance.cjs:77:155
+    at Array.map (<anonymous>)
+    at coverage (/workspace/3m_music-/audit/performance.cjs:77:39)
+    at /workspace/3m_music-/audit/performance.cjs:79:229

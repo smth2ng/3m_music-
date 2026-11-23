@@ -2,9 +2,12 @@ import { cp, mkdir, rm } from 'node:fs/promises';
 await rm('dist', { recursive: true, force: true });
 await mkdir('dist');
 await cp('public', 'dist', { recursive: true });
-console.log('Static website built in dist/');
 const { buildArtists } = await import('./artists.mjs');
 await buildArtists();
+const { buildContent } = await import('./content.mjs');
+await buildContent();
+const { buildSEO } = await import('./seo.mjs');
+await buildSEO();
 
 // Tie asset URLs to their contents so browsers load matching scripts and styles.
 const { createHash } = await import('node:crypto');
@@ -45,3 +48,5 @@ async function versionAssets(directory) {
   }
 }
 await versionAssets('dist');
+
+console.log('Static website built in dist/');

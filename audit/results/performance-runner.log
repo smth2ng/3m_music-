@@ -1,0 +1,18 @@
+Lighthouse index.html mobile exit 0
+Lighthouse index.html desktop exit 0
+Lighthouse artists.html mobile exit 0
+Lighthouse artists.html desktop exit 0
+Lighthouse teachers.html mobile exit 0
+Lighthouse teachers.html desktop exit 0
+Lighthouse contacts.html mobile exit 0
+Lighthouse contacts.html desktop exit 0
+Lighthouse admin/ mobile exit 0
+Lighthouse admin/ desktop exit 0
+TypeError [ERR_INVALID_ARG_TYPE]: The "string" argument must be of type string or an instance of Buffer or ArrayBuffer. Received undefined
+    at Buffer.byteLength (node:buffer:860:11)
+    at /workspace/3m_music-/audit/performance.cjs:76:76
+    at Array.map (<anonymous>)
+    at coverage (/workspace/3m_music-/audit/performance.cjs:76:39)
+    at /workspace/3m_music-/audit/performance.cjs:78:229 {
+  code: 'ERR_INVALID_ARG_TYPE'
+}

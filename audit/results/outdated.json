@@ -1,0 +1,9 @@
+{
+  "playwright": {
+    "current": "1.62.1",
+    "wanted": "1.62.1",
+    "latest": "1.65.1",
+    "dependent": "3m_music-",
+    "location": "/workspace/3m_music-/node_modules/playwright"
+  }
+}

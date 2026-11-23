@@ -1,0 +1,119 @@
+Matrix 320x568 and landscape complete
+Matrix 360x640 and landscape complete
+Matrix 375x667 and landscape complete
+Matrix 390x844 and landscape complete
+Matrix 414x896 and landscape complete
+Matrix 430x932 and landscape complete
+Matrix 600x960 and landscape complete
+Matrix 768x1024 and landscape complete
+Matrix 820x1180 and landscape complete
+Matrix 1024x1366 and landscape complete
+Matrix 1280x720 and landscape complete
+Matrix 1366x768 and landscape complete
+Matrix 1440x900 and landscape complete
+Matrix 1920x1080 and landscape complete
+Matrix 2560x1440 and landscape complete
+FAIL Internal links and static files under GitHub Pages subpath: response.status is not a function
+FAIL Navigation, modal buttons, Escape, focus trap and restoration: Expected values to be strictly equal:
+
+false !== true
+
+FAIL Carousel focus survives hiding an old card: focus=
+
+2 !== 3
+
+FAIL 200% browser zoom approximation via half CSS viewport, all pages: Expected values to be strictly equal:
+
+3 !== 0
+
+FAIL Malformed localStorage handling: Expected values to be strictly deep-equal:
++ actual - expected
+
++ [
++   "Cannot read properties of null (reading 'id')"
++ ]
+- []
+
+FAIL Removing local override restores baseline: Expected values to be strictly equal:
+
+3 !== 2
+
+FAIL Missing artist must have accessible heading and usable return link: Expected values to be strictly equal:
+
+0 !== 1
+
+{
+  "matrix": 252,
+  "checks": [
+    {
+      "name": "Internal links and static files under GitHub Pages subpath",
+      "status": "failed"
+    },
+    {
+      "name": "Navigation, modal buttons, Escape, focus trap and restoration",
+      "status": "failed"
+    },
+    {
+      "name": "Carousel wheel, keyboard, 3 visible artists, momentum, focus and touch swipe",
+      "status": "passed"
+    },
+    {
+      "name": "Carousel focus survives hiding an old card",
+      "status": "failed"
+    },
+    {
+      "name": "200% browser zoom approximation via half CSS viewport, all pages",
+      "status": "failed"
+    },
+    {
+      "name": "JavaScript disabled baseline and phone access",
+      "status": "passed"
+    },
+    {
+      "name": "Populated content screenshots, 12 releases and 3 additional artists",
+      "status": "passed"
+    },
+    {
+      "name": "Admin artist, teacher and release CRUD, URL validation, logout",
+      "status": "passed"
+    },
+    {
+      "name": "Malformed localStorage handling",
+      "status": "failed"
+    },
+    {
+      "name": "Removing local override restores baseline",
+      "status": "failed"
+    },
+    {
+      "name": "Missing artist must have accessible heading and usable return link",
+      "status": "failed"
+    },
+    {
+      "name": "Reduced-motion toggle removes animated enhancement",
+      "status": "passed"
+    },
+    {
+      "name": "Keyboard focus indicators and 200% text zoom overflow probe",
+      "status": "passed"
+    }
+  ],
+  "axe": 33,
+  "browsers": [
+    {
+      "name": "chromium",
+      "status": "available",
+      "version": "156.0.8078.79"
+    },
+    {
+      "name": "firefox",
+      "status": "unavailable",
+      "reason": "browserType.launch: Executable doesn't exist at /tmp/3m-audit-browsers/firefox-1572/firefox/firefox"
+    },
+    {
+      "name": "webkit",
+      "status": "unavailable",
+      "reason": "browserType.launch: Executable doesn't exist at /tmp/3m-audit-browsers/webkit-2388/pw_run.sh"
+    }
+  ]
+}

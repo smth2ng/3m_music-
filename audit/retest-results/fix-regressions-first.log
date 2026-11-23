@@ -1,0 +1,12 @@
+Responsive images load smaller source on mobile The expression evaluated to a falsy value:
+
+  assert.ok(sources.every(item=>item.width<=480))
+
+passed Local two-tab conflict preserves first teacher edit
+passed Photo/video previews obey hidden and action bar is in normal flow
+passed Malformed JSON falls back with visible admin warning; null entries are skipped
+passed Backup export and collection restore preserve Unicode and validate before writing
+passed Static metadata, robots, sitemap and visible placeholders
+failed Responsive images load smaller source on mobile
+passed Server login, logout, invalid JSON, oversized body and route validation
+passed Server-backed publishing for artists, teachers and releases with mock GitHub and conflict protection

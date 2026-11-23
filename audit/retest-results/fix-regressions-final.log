@@ -1,0 +1,9 @@
+passed Local two-tab conflict preserves first teacher edit
+passed Photo/video previews obey hidden and action bar is in normal flow
+passed Malformed JSON falls back with visible admin warning; null entries are skipped
+passed Backup export and collection restore preserve Unicode and validate before writing
+passed Static metadata, robots, sitemap and visible placeholders
+passed Responsive images load smaller source on mobile
+passed 200 percent narrow viewport has no header, title or carousel overlaps
+passed Server login, logout, invalid JSON, oversized body and route validation
+passed Server-backed publishing for artists, teachers and releases with mock GitHub and conflict protection

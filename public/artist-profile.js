@@ -1,17 +1,16 @@
+import { loadSnapshot, photoUrl } from './content-store.js';
 (async () => {
   const main = document.querySelector('.artist-profile');
   try {
-    const saved = localStorage.getItem('3m-artists-demo');
-    const response = saved ? null : await fetch('./data/artists.json');
-    if (response && !response.ok) throw new Error();
-    const artists = saved ? JSON.parse(saved).artists : (await response.json()).artists;
+    const artists = (await loadSnapshot('artists')).items;
     const artist = artists.find(item => item.id === new URLSearchParams(location.search).get('id'));
     if (!artist) throw new Error();
     document.title = artist.name + ' — 3М music';
     const image = (path, className = '') => {
       const img = document.createElement('img');
-      if (/^data:image\/(png|jpeg|webp);base64,/.test(path)) img.src = path;
-      else if (/^assets\/uploads\/[a-zA-Z0-9._-]+\.(png|jpe?g|webp)$/i.test(path)) img.src = './' + path;
+      img.src = photoUrl(path);
+      img.width = 640;
+      img.height = 640;
       img.alt = artist.name;
       img.className = className;
       return img;
@@ -44,5 +43,13 @@
     links.className = 'platform-links'; links.ariaLabel = 'Слушать';
     for (const item of artist.links ?? []) { const a = link(item.url, item.label, 'platform-link'); if (a) links.append(a); }
     info.append(links); main.replaceChildren(media, info);
-  } catch { main.textContent = 'Артист не найден. Вернитесь в раздел «Артисты».'; }
+  } catch {
+    const heading = document.createElement('h1');
+    heading.textContent = 'Артист не найден';
+    const link = document.createElement('a');
+    link.className = 'text-link';
+    link.href = './artists.html';
+    link.textContent = 'Вернуться к артистам';
+    main.replaceChildren(heading, link);
+  }
 })();

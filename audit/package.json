@@ -1,0 +1,14 @@
+{
+  "name": "3m-music-independent-audit",
+  "private": true,
+  "scripts": {
+    "test": "node retest.cjs",
+    "regressions": "node fix-regressions.cjs",
+    "performance": "node performance-retest.cjs"
+  },
+  "devDependencies": {
+    "playwright": "1.65.1",
+    "@axe-core/playwright": "4.14.0",
+    "lighthouse": "13.6.0"
+  }
+}

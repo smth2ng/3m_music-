@@ -1,0 +1,167 @@
+{
+  "checks": [],
+  "hiddenPreviews": [
+    {
+      "id": "logo-preview",
+      "hiddenAttribute": true,
+      "display": "none",
+      "visible": false,
+      "src": null
+    },
+    {
+      "id": "video-preview",
+      "hiddenAttribute": true,
+      "display": "flex",
+      "visible": true,
+      "src": null
+    },
+    {
+      "id": "photo-preview",
+      "hiddenAttribute": true,
+      "display": "block",
+      "visible": true,
+      "src": ""
+    }
+  ],
+  "adminOverlaps": {
+    "focus": {
+      "top": 409.375,
+      "bottom": 543.375
+    },
+    "actions": [
+      {
+        "id": "",
+        "top": 748,
+        "bottom": 844,
+        "height": 96
+      },
+      {
+        "id": "teacher-admin-list",
+        "top": 969.0625,
+        "bottom": 1229.0625,
+        "height": 260
+      },
+      {
+        "id": "release-admin-list",
+        "top": 1454.0625,
+        "bottom": 1486.0625,
+        "height": 32
+      }
+    ],
+    "viewport": 844
+  },
+  "modalFocus": [
+    {
+      "tag": "A",
+      "class": "cta",
+      "text": "8-910-940-76-08",
+      "insideDialog": true
+    },
+    {
+      "tag": "BODY",
+      "class": "",
+      "text": "\nПерейти к содержимому\n\n  \n    \n    \n      Главная\n      Артисты\n      Преподава",
+      "insideDialog": false
+    },
+    {
+      "tag": "BUTTON",
+      "class": "dialog-close",
+      "text": "×",
+      "insideDialog": true
+    },
+    {
+      "tag": "A",
+      "class": "cta",
+      "text": "8-910-940-76-08",
+      "insideDialog": true
+    },
+    {
+      "tag": "BODY",
+      "class": "",
+      "text": "\nПерейти к содержимому\n\n  \n    \n    \n      Главная\n      Артисты\n      Преподава",
+      "insideDialog": false
+    },
+    {
+      "tag": "BUTTON",
+      "class": "dialog-close",
+      "text": "×",
+      "insideDialog": true
+    },
+    {
+      "tag": "A",
+      "class": "cta",
+      "text": "8-910-940-76-08",
+      "insideDialog": true
+    },
+    {
+      "tag": "BODY",
+      "class": "",
+      "text": "\nПерейти к содержимому\n\n  \n    \n    \n      Главная\n      Артисты\n      Преподава",
+      "insideDialog": false
+    }
+  ],
+  "restoredFocus": {
+    "tag": "BUTTON",
+    "contact": true
+  },
+  "carouselFocus": [
+    {
+      "active": 1,
+      "focus": "artist artist--left artist--back",
+      "tag": "A"
+    },
+    {
+      "active": 2,
+      "focus": "",
+      "tag": "BODY"
+    },
+    {
+      "active": 2,
+      "focus": "",
+      "tag": "BODY"
+    },
+    {
+      "active": 2,
+      "focus": "",
+      "tag": "BODY"
+    }
+  ],
+  "xss": {
+    "text": "<img src=x onerror=alert(1)>",
+    "injectedImages": 0
+  },
+  "releaseLayout": [
+    {
+      "width": 390,
+      "columns": 2,
+      "height": 2072.0625,
+      "cards": 12
+    },
+    {
+      "width": 768,
+      "columns": 4,
+      "height": 1034.171875,
+      "cards": 12
+    },
+    {
+      "width": 1024,
+      "columns": 4,
+      "height": 1226.171875,
+      "cards": 12
+    },
+    {
+      "width": 1440,
+      "columns": 4,
+      "height": 1406.78125,
+      "cards": 12
+    }
+  ],
+  "newVisitor": {
+    "releases": 0,
+    "artistCards": 2
+  },
+  "invalidData": {
+    "releaseMessage": "Не удалось загрузить релизы.",
+    "releaseCards": 0
+  }
+}

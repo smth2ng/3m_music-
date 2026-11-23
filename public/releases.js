@@ -10,6 +10,8 @@ async function renderReleases() {
       image.src = releasePhoto(release.photo);
       image.alt = 'Обложка — ' + release.title;
       image.loading = 'lazy';
+      image.width = 640;
+      image.height = 640;
       const artist = document.createElement('p');
       artist.textContent = artists.find(item => item.id === release.artistId)?.name ?? release.artistName;
       const title = document.createElement('h3');

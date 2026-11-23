@@ -1,0 +1,19 @@
+
+> 3m-music@1.0.0 test
+> node tests/smoke.cjs
+
+PASS 320px: layout and assets
+PASS 390px: layout, assets, menu, wheel/keyboard carousel, artist tab, overlay, contact dialog, touch swipe, page scroll
+PASS 600px: layout and assets
+PASS 768px: layout and assets
+PASS 1024px: layout and assets
+PASS 1440px: layout, assets, menu, wheel/keyboard carousel, artist tab, overlay, contact dialog
+PASS 1920px: layout and assets
+PASS 390px: magnetic scrolling, chapter reveal, glass, progress, reduced-motion preference change
+PASS 1440px: magnetic scrolling, chapter reveal, glass, progress, reduced-motion preference change
+All 7 viewport checks passed.
+npm notice
+npm notice New major version of npm available! 11.19.1 -> 12.2.3
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.3
+npm notice To update run: npm install -g npm@12.2.3
+npm notice

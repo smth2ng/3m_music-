@@ -1,7 +1,10 @@
-import { readCollection, releaseArtists, releaseStorageKey, releasePhoto, listeningUrl } from '../release-data.js';
+import { loadSnapshot, saveSnapshot, readImage, saveMessage } from '../content-store.js';
+import { releaseArtists, releasePhoto, listeningUrl } from '../release-data.js';
 
 export async function setupReleases() {
-  let releases = await readCollection('releases', releaseStorageKey);
+  const snapshot = await loadSnapshot('releases');
+  let releases = snapshot.items;
+  let revision = snapshot.revision;
   const form = document.querySelector('#release-editor');
   const list = document.querySelector('#release-admin-list');
   const preview = document.querySelector('#release-preview');
@@ -9,14 +12,15 @@ export async function setupReleases() {
   let editing = null;
   let previewUrl;
   let busy = false;
-  function persist(next) {
-    try { localStorage.setItem(releaseStorageKey, JSON.stringify({ releases: next })); }
-    catch { throw new Error('Не хватает места в браузере. Уменьшите обложку.'); }
-    releases = next;
+  async function persist(next) {
+    const saved = await saveSnapshot('releases', next, revision);
+    releases = saved.items;
+    revision = saved.revision;
     form.hidden = true;
     render();
   }
   async function open(release = null) {
+    if (busy) return;
     editing = release;
     form.reset();
     if (previewUrl) URL.revokeObjectURL(previewUrl);
@@ -51,9 +55,9 @@ export async function setupReleases() {
       const remove = document.createElement('button');
       remove.type = 'button'; remove.textContent = 'Удалить';
       remove.setAttribute('aria-label', 'Удалить релиз — ' + release.title);
-      remove.onclick = () => {
-        if (!confirm('Удалить релиз «' + release.title + '»?')) return;
-        try { persist(releases.filter(item => item.id !== release.id)); status.textContent = 'Релиз удалён в этом браузере.'; }
+      remove.onclick = async () => {
+        if (busy || !confirm('Удалить релиз «' + release.title + '»?')) return;
+        try { await persist(releases.filter(item => item.id !== release.id)); status.textContent = saveMessage('Список релизов'); }
         catch (error) { status.textContent = error.message; }
       };
       row.append(title, edit, remove);
@@ -81,24 +85,20 @@ export async function setupReleases() {
       if (!title) throw new Error('Укажите название релиза.');
       const url = listeningUrl(fields.url.value.trim());
       const artistId = fields.artist.value;
+      const artistName = fields.artist.selectedOptions[0]?.textContent;
       if (!artistId) throw new Error('Выберите артиста.');
       let photo = editing?.photo;
       const file = fields.photo.files[0];
       if (file) {
-        if (!['image/png', 'image/jpeg', 'image/webp'].includes(file.type) || file.size > 8 * 1024 * 1024) throw new Error('Обложка должна быть PNG, JPEG или WebP до 8 МБ.');
-        photo = await new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.onload = () => resolve(reader.result);
-          reader.onerror = () => reject(new Error('Не удалось прочитать обложку.'));
-          reader.readAsDataURL(file);
-        });
+        photo = await readImage(file);
       }
       if (!photo) throw new Error('Добавьте обложку.');
-      const release = { id: editing?.id ?? crypto.randomUUID(), title, artistId, artistName: fields.artist.selectedOptions[0].textContent, photo, url };
-      persist(editing ? releases.map(item => item.id === editing.id ? release : item) : [release, ...releases]);
-      status.textContent = 'Релиз сохранён в этом браузере.';
+      const release = { id: editing?.id ?? crypto.randomUUID(), title, artistId, artistName, photo, url };
+      await persist(editing ? releases.map(item => item.id === editing.id ? release : item) : [release, ...releases]);
+      status.textContent = saveMessage('Релиз');
     } catch (error) { status.textContent = error.message; }
     finally { busy = false; submit.disabled = false; }
   };
   render();
+  return snapshot.warning;
 }

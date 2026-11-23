@@ -1,0 +1,24 @@
+{
+  "errors": [
+    "Cannot read properties of null (reading 'id')"
+  ],
+  "console": [],
+  "failed": [
+    {
+      "url": "https://yandex.ru/map-widget/v1/?text=%D0%A2%D1%83%D0%BB%D0%B0%2C%20%D0%93%D0%BE%D1%80%D0%BE%D0%B4%D1%81%D0%BA%D0%BE%D0%B9%20%D0%BF%D0%B5%D1%80%D0%B5%D1%83%D0%BB%D0%BE%D0%BA%2C%209&mode=search",
+      "error": "net::ERR_BLOCKED_BY_CLIENT",
+      "intentional": true
+    },
+    {
+      "url": "http://127.0.0.1:4380/3m_music-/assets/logo.svg",
+      "error": "net::ERR_ABORTED",
+      "intentional": false
+    },
+    {
+      "url": "https://yandex.ru/map-widget/v1/?text=%D0%A2%D1%83%D0%BB%D0%B0%2C%20%D0%93%D0%BE%D1%80%D0%BE%D0%B4%D1%81%D0%BA%D0%BE%D0%B9%20%D0%BF%D0%B5%D1%80%D0%B5%D1%83%D0%BB%D0%BE%D0%BA%2C%209&mode=search",
+      "error": "net::ERR_BLOCKED_BY_CLIENT",
+      "intentional": true
+    }
+  ],
+  "badResponses": []
+}

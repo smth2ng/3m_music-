@@ -3,6 +3,7 @@ let cards = [...document.querySelectorAll('.artist')];
 const carouselStatus = document.querySelector('#carousel-status');
 let active = 0;
 function selectArtist(index, animate = true) {
+  const focused = document.activeElement;
   const previous = cards.map(card => {
     const bounds = card.getBoundingClientRect();
     card.getAnimations().forEach(animation => animation.cancel());
@@ -18,6 +19,7 @@ function selectArtist(index, animate = true) {
     card.classList.toggle('artist--right', right);
     card.classList.toggle('artist--active', selected);
     card.classList.toggle('artist--back', !selected);
+    card.tabIndex = selected ? 0 : -1;
     if (selected) card.setAttribute('aria-current', 'true');
     else card.removeAttribute('aria-current');
     if (animate && !card.hidden && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -36,6 +38,7 @@ function selectArtist(index, animate = true) {
       ], { duration: 360, easing: 'cubic-bezier(.2,.7,.2,1)' });
     }
   });
+  if (cards.some(card => card === focused && card.hidden)) cards[active].focus({ preventScroll: true });
   carouselStatus.textContent = `Карточка ${active + 1} из ${cards.length}`;
 }
 selectArtist(0, false);
